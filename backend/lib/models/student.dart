@@ -1,5 +1,3 @@
-import 'package:backend/models/user.dart';
-
 class Student {
   final String id;
   final String name;
