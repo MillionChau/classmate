@@ -1,45 +1,54 @@
-# Miscellaneous
-*.class
-*.log
-*.pyc
-*.swp
-.DS_Store
-.atom/
-.build/
-.buildlog/
-.history
-.svn/
-.swiftpm/
-migrate_working_dir/
+# ----------------------------
+# Flutter Standard Ignore Rules
+# ----------------------------
+# Bỏ qua tất cả các platform
+**/android/
+**/ios/
+**/linux/
+**/macos/
+**/windows/
+**/web/
 
-# IntelliJ related
-*.iml
-*.ipr
-*.iws
-.idea/
-
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
-
-# Flutter/Dart/Pub related
-**/doc/api/
-**/ios/Flutter/.last_build_id
+# Bỏ qua các file build và cấu hình Flutter
+.gradle/
+build/
 .dart_tool/
-.flutter-plugins
-.flutter-plugins-dependencies
+.packages
 .pub-cache/
 .pub/
-/build/
+.pubspec.lock
+.flutter-plugins
+.flutter-plugins-dependencies
+.settings/
+.idea/
+.vscode/
+*.iml
+*.swp
+*.swo
+*.log
+*.lock
+.DS_Store
+*.orig
+*.pyc
+*.class
+*.so
+*.o
+*.a
+*.apk
+*.aab
+*.ipa
+*.dSYM.zip
+*.symbols
+.env
+.env*
 
-# Symbolication related
-app.*.symbols
+# Bỏ qua toàn bộ thư mục Flutter-generated
+**/Flutter/
 
-# Obfuscation related
-app.*.map.json
-
-# Android Studio will place build artifacts here
-/android/app/debug
-/android/app/profile
-/android/app/release
+# ----------------------------
+# PHẦN QUAN TRỌNG: Chỉ giữ lại những thứ sau
+# ----------------------------
+!lib/**          # Giữ toàn bộ thư mục lib và nội dung con
+!pubspec.yaml    # Giữ file pubspec
+!.gitignore      # Giữ file gitignore
+!.metadata       # Giữ metadata của Flutter (cần thiết)
