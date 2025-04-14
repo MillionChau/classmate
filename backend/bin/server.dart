@@ -5,6 +5,7 @@ import 'package:shelf_router/shelf_router.dart';
 
 import '../lib/api/auth_api.dart';
 import '../lib/api/student_api.dart';
+import '../lib/api/teacher_api.dart';
 
 import '../lib/services/mongo_service.dart';
 
@@ -14,7 +15,8 @@ void main() async {
 
   final router = Router()
     ..mount('/auth/', authApi)
-    ..mount('/students/', studentApi);
+    ..mount('/students/', studentApi)
+    ..mount('/teachers/', teacherApi);
 
   final handler = Pipeline().addMiddleware(logRequests()).addHandler(router);
 
