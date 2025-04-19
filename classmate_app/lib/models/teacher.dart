@@ -1,13 +1,13 @@
-class Admin {
+class Teacher {
   final String id;
   final String name;
-  final String position;
+  final String subject;
   final String password;
-
-  Admin({
+  
+  Teacher({
     required this.id,
     required this.name,
-    required this.position,
+    required this.subject,
     required this.password,
   });
 
@@ -15,18 +15,18 @@ class Admin {
     return {
       'id': id,
       'name': name,
-      'posotion': position,
+      'subject': subject,
       'password': password,
-      'role': 'admin',
+      'role': 'teacher',
     };
   }
 
-  static fromMap(Map<String, dynamic> map) {
-    return Admin(
+  static Teacher fromMap(Map<String, dynamic> map) {
+    return Teacher(
       id: map['id'],
       name: map['name'],
-      position: map['position'],
-      password: map['password']
+      subject: map['subject'],
+      password: map['password'],
     );
   }
 }
