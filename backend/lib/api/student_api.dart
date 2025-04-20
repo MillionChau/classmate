@@ -6,6 +6,7 @@ Router get studentApi {
 
   router.post('/add', StudentController.addStudent);
   router.get('/all', StudentController.getStudent);
+  router.get('/count', StudentController.getStudentCount);
 
   return router;
 }
