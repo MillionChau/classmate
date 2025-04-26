@@ -15,8 +15,6 @@ class _StudentHomePageState extends State<StudentHomePage> {
   int student = 0;
   int teacher = 0;
   int admin = 0;
-
-<<<<<<< HEAD
   Widget _buildStatCard(
       String title, String count, IconData icon, Color color) {
     return Container(
