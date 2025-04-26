@@ -26,7 +26,7 @@ class HomePage extends StatelessWidget {
   Widget _buildStatCard(
       String title, String count, IconData icon, Color color) {
     return Container(
-      width: 100,
+      width: 120,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,

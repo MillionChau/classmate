@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 // lib/main.dart
 
 import 'package:flutter/material.dart';
@@ -23,4 +21,3 @@ class ClassMateApp extends StatelessWidget {
     );
   }
 }
->>>>>>> 7d4fcb01065babd82dc557bb5d15c510387ae653
