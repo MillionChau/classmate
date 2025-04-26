@@ -1,5 +1,26 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter/material.dart';
+import 'schedule_screen.dart'; // import file này nè
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Lịch Giảng',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: const ScheduleScreen(), // gọi màn hình schedule
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
+
 class ScheduleScreen extends StatelessWidget {
   const ScheduleScreen({super.key});
 
