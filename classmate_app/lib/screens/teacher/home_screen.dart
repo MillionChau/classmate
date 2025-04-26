@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:classmate_app/widgets/custom_drawer.dart';
 
 void main() {
   runApp(const MyApp());

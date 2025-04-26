@@ -126,4 +126,18 @@ class AdminController {
       );
     }
   }
+
+  static Future<Response> getAdminCount(Request req) async {
+    try {
+      final collection = MongoService.db.collection('users');
+      final count = await collection.count({'role': 'admin'});
+
+      return Response.ok(jsonEncode({'count': count}));
+    } catch (e, stack) {
+      print('❌ Lỗi khi lấy số lượng admin: $e\n$stack');
+      return Response.internalServerError(
+        body: jsonEncode({'message': 'Lỗi server khi lấy số lượng admin'}),
+      );
+    }
+  }
 }

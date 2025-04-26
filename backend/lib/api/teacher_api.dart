@@ -8,6 +8,7 @@ Router get teacherApi {
   router.get('/all', TeacherController.getTeacher);
   router.put('/update/<id>', TeacherController.updateTeacher);
   router.delete('/remove/<id>', TeacherController.deleteTeacher);
+  router.get('/count', TeacherController.getTeacherCount);
 
   return router;
 }

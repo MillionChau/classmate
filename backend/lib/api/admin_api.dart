@@ -8,6 +8,7 @@ Router get adminApi {
   router.get('/all', AdminController.getAdmin);
   router.put('/update/<id>', AdminController.updateAdmin);
   router.delete('/remove/<id>', AdminController.deleteAdmin);
+  router.get('/count', AdminController.getAdminCount);
 
   return router;
 }
