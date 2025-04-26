@@ -15,47 +15,10 @@ class _StudentHomePageState extends State<StudentHomePage> {
   int student = 0;
   int teacher = 0;
   int admin = 0;
-  Widget _buildStatCard(
-      String title, String count, IconData icon, Color color) {
-    return Container(
-      width: 120,
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 5)],
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(count,
-              style: TextStyle(
-                  fontSize: 22, fontWeight: FontWeight.bold, color: color)),
-          const SizedBox(height: 4),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, size: 16, color: color),
-              const SizedBox(width: 4),
-              Flexible(
-                child: Text(
-                  title,
-                  style: const TextStyle(fontSize: 12),
-                  overflow: TextOverflow.ellipsis,
-                  softWrap: true,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-=======
   @override
   void initState() {
     super.initState();
     loadStats();
->>>>>>> 814d39281f518b60938b35860c6a3d789cfae7a9
   }
 
   Future<void> loadStats() async {
