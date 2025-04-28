@@ -34,7 +34,6 @@ class _StudentHomePageState extends State<StudentHomePage> {
       });
     } catch(e) {
       print("Lỗi khi load số liệu: $e");
-      // Có thể thêm SnackBar để hiển thị lỗi cho người dùng
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Lỗi khi tải dữ liệu: ${e.toString()}')),
       );
