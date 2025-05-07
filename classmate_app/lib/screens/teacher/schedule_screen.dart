@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter/material.dart';
-import 'schedule_screen.dart'; // import file này nè
-
 void main() {
   runApp(const MyApp());
 }
@@ -15,7 +12,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Lịch Giảng',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const ScheduleScreen(), // gọi màn hình schedule
+      home: const ScheduleScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -27,13 +24,13 @@ class ScheduleScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.pink[50], // Màu nền nhạt
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
         title: const Text('Xem lịch giảng'),
         leading: IconButton(
           icon: const Icon(Icons.menu),
           onPressed: () {
-            Scaffold.of(context).openDrawer(); // Nếu có Drawer
+            Scaffold.of(context).openDrawer();
           },
         ),
       ),

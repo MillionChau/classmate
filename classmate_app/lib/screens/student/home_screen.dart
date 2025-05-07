@@ -15,47 +15,10 @@ class _StudentHomePageState extends State<StudentHomePage> {
   int student = 0;
   int teacher = 0;
   int admin = 0;
-  Widget _buildStatCard(
-      String title, String count, IconData icon, Color color) {
-    return Container(
-      width: 120,
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 5)],
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(count,
-              style: TextStyle(
-                  fontSize: 22, fontWeight: FontWeight.bold, color: color)),
-          const SizedBox(height: 4),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, size: 16, color: color),
-              const SizedBox(width: 4),
-              Flexible(
-                child: Text(
-                  title,
-                  style: const TextStyle(fontSize: 12),
-                  overflow: TextOverflow.ellipsis,
-                  softWrap: true,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-=======
   @override
   void initState() {
     super.initState();
     loadStats();
->>>>>>> 814d39281f518b60938b35860c6a3d789cfae7a9
   }
 
   Future<void> loadStats() async {
@@ -69,7 +32,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
         teacher = teacherCount;
         admin = adminCount;
       });
-    } catch(e) {
+    } catch (e) {
       print("❌ Lỗi khi load số liệu: $e");
       // Có thể thêm SnackBar để hiển thị lỗi cho người dùng
       ScaffoldMessenger.of(context).showSnackBar(
@@ -105,23 +68,20 @@ class _StudentHomePageState extends State<StudentHomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 StatCard(
-                  title: "Học sinh", 
-                  count: student.toString(), 
-                  icon: Icons.school, 
-                  color: Colors.blue
-                ),
+                    title: "Học sinh",
+                    count: student.toString(),
+                    icon: Icons.school,
+                    color: Colors.blue),
                 StatCard(
-                  title: "Giáo viên", 
-                  count: teacher.toString(), 
-                  icon: Icons.person, 
-                  color: Colors.green
-                ),
+                    title: "Giáo viên",
+                    count: teacher.toString(),
+                    icon: Icons.person,
+                    color: Colors.green),
                 StatCard(
-                  title: "Thông báo", 
-                  count: admin.toString(), 
-                  icon: Icons.notifications, 
-                  color: Colors.orange
-                ),
+                    title: "Thông báo",
+                    count: admin.toString(),
+                    icon: Icons.notifications,
+                    color: Colors.orange),
               ],
             ),
             const SizedBox(height: 24),
@@ -136,7 +96,8 @@ class _StudentHomePageState extends State<StudentHomePage> {
                   QuickAccessCard(
                     title: 'Xem TKB',
                     icon: Icons.calendar_today,
-                    onTap: () => Navigator.pushNamed(context, '/student/timetable'),
+                    onTap: () =>
+                        Navigator.pushNamed(context, '/student/timetable'),
                   ),
                   QuickAccessCard(
                     title: 'Xem điểm',
@@ -146,7 +107,8 @@ class _StudentHomePageState extends State<StudentHomePage> {
                   QuickAccessCard(
                     title: 'Thông báo',
                     icon: Icons.notifications_active,
-                    onTap: () => Navigator.pushNamed(context, '/student/notifications'),
+                    onTap: () =>
+                        Navigator.pushNamed(context, '/student/notifications'),
                   ),
                 ],
               ),
