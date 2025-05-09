@@ -45,7 +45,7 @@ class NotificationController {
 
       return Response.ok(jsonEncode({'message': 'Gửi thông báo thành công!'}));
     } catch (e, stack) {
-      print('❌ Lỗi khi gửi thông báo: $e\n$stack');
+      print('Lỗi khi gửi thông báo: $e\n$stack');
       return Response.internalServerError(
         body: jsonEncode({'message': 'Lỗi server khi gửi thông báo'}),
       );
@@ -62,7 +62,7 @@ class NotificationController {
 
       return Response.ok(jsonEncode(approvedNotifications));
     } catch (e, stack) {
-      print('❌ Lỗi khi lấy thông báo: $e\n$stack');
+      print('Lỗi khi lấy thông báo: $e\n$stack');
       return Response.internalServerError(
         body: jsonEncode({'message': 'Lỗi server khi lấy thông báo'}),
       );
@@ -92,7 +92,7 @@ class NotificationController {
 
       return Response.ok(jsonEncode({'message': 'Duyệt thông báo thành công'}));
     } catch (e, stack) {
-      print('❌ Lỗi khi duyệt thông báo: $e\n$stack');
+      print('Lỗi khi duyệt thông báo: $e\n$stack');
       return Response.internalServerError(
         body: jsonEncode({'message': 'Lỗi server khi duyệt thông báo'}),
       );
@@ -115,7 +115,7 @@ class NotificationController {
 
       return Response.ok(jsonEncode({'message': 'Xoá thông báo thành công'})); // ❗ return ở đây!
     } catch (e, stack) {
-      print('❌ Lỗi khi xoá thông báo: $e\n$stack');
+      print('Lỗi khi xoá thông báo: $e\n$stack');
       return Response.internalServerError(
         body: jsonEncode({'message': 'Lỗi server khi xoá thông báo'}),
       );

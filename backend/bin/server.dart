@@ -32,5 +32,5 @@ void main() async {
     .addHandler(router);
 
   final server = await io.serve(handler, InternetAddress.anyIPv4, 8080);
-  print('🚀 Server running at http://${server.address.host}:${server.port}');
+  print('Server running at http://${server.address.host}:${server.port}');
 }

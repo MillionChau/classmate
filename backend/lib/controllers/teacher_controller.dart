@@ -39,7 +39,7 @@ class TeacherController {
         'id': teacher.id,
       }));
     } catch(e, stack) {
-      print('❌ Lỗi khi thêm giáo viên: $e\n$stack');
+      print('Lỗi khi thêm giáo viên: $e\n$stack');
       return Response.internalServerError(
         body: jsonEncode({'message': 'Lỗi khi server thêm giáo viên', 'details': e.toString()})
       );
@@ -53,7 +53,7 @@ class TeacherController {
 
       return Response.ok(jsonEncode(teachers));
     } catch(e, stack) {
-      print('❌ Lỗi khi lấy danh sách giáo viên: $e\n$stack');
+      print('Lỗi khi lấy danh sách giáo viên: $e\n$stack');
 
       return Response.internalServerError(
         body: jsonEncode({'message': 'Lỗi khi lấy danh sách giáo viên'})
@@ -95,7 +95,7 @@ class TeacherController {
 
       return Response.ok(jsonEncode({'message': 'Cập nhật giáo viên thành công'}));
     } catch (e, stack) {
-      print('❌ Lỗi khi cập nhật giáo viên: $e\n$stack');
+      print('Lỗi khi cập nhật giáo viên: $e\n$stack');
       return Response.internalServerError(
         body: jsonEncode({'message': 'Lỗi server khi cập nhật giáo viên'}),
       );
@@ -121,7 +121,7 @@ class TeacherController {
 
       return Response.ok(jsonEncode({'message': 'Xoá giáo viên thành công'}));
     } catch (e, stack) {
-      print('❌ Lỗi khi xoá giáo viên: $e\n$stack');
+      print('Lỗi khi xoá giáo viên: $e\n$stack');
       return Response.internalServerError(
         body: jsonEncode({'message': 'Lỗi server khi xoá giáo viên'}),
       );
@@ -135,7 +135,7 @@ class TeacherController {
 
       return Response.ok(jsonEncode({'count': count}));
     } catch (e, stack) {
-      print('❌ Lỗi khi lấy số lượng giáo viên: $e\n$stack');
+      print('Lỗi khi lấy số lượng giáo viên: $e\n$stack');
       return Response.internalServerError(
         body: jsonEncode({'message': 'Lỗi server khi lấy số lượng giáo viên'}),
       );
