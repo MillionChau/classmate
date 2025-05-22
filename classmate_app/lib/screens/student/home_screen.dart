@@ -15,7 +15,10 @@ class _StudentHomePageState extends State<StudentHomePage> {
   int student = 0;
   int teacher = 0;
   int admin = 0;
+<<<<<<< HEAD
 
+=======
+>>>>>>> a0072a239524841fe073ff58c02f285f61d2b361
   @override
   void initState() {
     super.initState();
@@ -36,6 +39,8 @@ class _StudentHomePageState extends State<StudentHomePage> {
     } catch (e) {
       print("❌ Lỗi khi load số liệu: $e");
       // Có thể thêm SnackBar để hiển thị lỗi cho người dùng
+    } catch (e) {
+      print("Lỗi khi load số liệu: $e");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Lỗi khi tải dữ liệu: ${e.toString()}')),
       );
