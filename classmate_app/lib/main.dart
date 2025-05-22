@@ -1,6 +1,8 @@
+<<<<<<< HEAD
 // lib/main.dart
-
+=======
 import 'package:classmate_app/screens/admin/dashboard_screen.dart';
+>>>>>>> a0072a239524841fe073ff58c02f285f61d2b361
 import 'package:flutter/material.dart';
 import 'routes/app_routes.dart';
 
@@ -18,9 +20,8 @@ class ClassMateApp extends StatelessWidget {
       title: 'ClassMate',
       debugShowCheckedModeBanner: false,
 
-      // Uncomment when ready
-      // initialRoute: AppRoutes.login,
-      // routes: AppRoutes.routes,
+      //initialRoute: AppRoutes.login,
+      //routes: AppRoutes.routes,
     );
   }
 }

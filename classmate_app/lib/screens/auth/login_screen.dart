@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../../../routes/app_routes.dart';
@@ -16,7 +17,9 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   bool _isLoading = false;
 
-  static const String baseUrl = 'http://localhost:8080/auth'; 
+  static final String baseUrl = kIsWeb 
+    ? 'http://localhost:8080/auth'   
+    : 'http://10.0.2.2:8080/auth';  
 
   Future<void> _login() async {
     if (_formKey.currentState!.validate()) {
@@ -88,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   decoration: const InputDecoration(
                     labelText: 'Tên đăng nhập',
                     border: OutlineInputBorder(),
-                    prefixIcon: const Icon(Icons.person), 
+                    prefixIcon: Icon(Icons.person), 
                   ),
                   validator: (value) =>
                       value == null || value.isEmpty ? 'Nhập tên đăng nhập' : null,

@@ -38,7 +38,7 @@ class AdminController {
         'id': admin.id,
       }));
     } catch(e, stack) {
-      print('❌ Lỗi khi thêm admin: $e\n$stack');
+      print('Lỗi khi thêm admin: $e\n$stack');
       return Response.internalServerError(
         body: jsonEncode({'message': 'Lỗi khi server thêm admin', 'details': e.toString()})
       );
@@ -52,7 +52,7 @@ class AdminController {
 
       return Response.ok(jsonEncode(Admins));
     } catch(e, stack) {
-      print('❌ Lỗi khi lấy danh sách admin: $e\n$stack');
+      print('Lỗi khi lấy danh sách admin: $e\n$stack');
 
       return Response.internalServerError(
         body: jsonEncode({'message': 'Lỗi khi lấy danh sách admin'})
@@ -94,7 +94,7 @@ class AdminController {
 
       return Response.ok(jsonEncode({'message': 'Cập nhật admin thành công'}));
     } catch (e, stack) {
-      print('❌ Lỗi khi cập nhật admin: $e\n$stack');
+      print('Lỗi khi cập nhật admin: $e\n$stack');
       return Response.internalServerError(
         body: jsonEncode({'message': 'Lỗi server khi cập nhật admin'}),
       );
@@ -120,7 +120,7 @@ class AdminController {
 
       return Response.ok(jsonEncode({'message': 'Xoá admin thành công'}));
     } catch (e, stack) {
-      print('❌ Lỗi khi xoá admin: $e\n$stack');
+      print('Lỗi khi xoá admin: $e\n$stack');
       return Response.internalServerError(
         body: jsonEncode({'message': 'Lỗi server khi xoá admin'}),
       );
@@ -134,7 +134,7 @@ class AdminController {
 
       return Response.ok(jsonEncode({'count': count}));
     } catch (e, stack) {
-      print('❌ Lỗi khi lấy số lượng admin: $e\n$stack');
+      print('Lỗi khi lấy số lượng admin: $e\n$stack');
       return Response.internalServerError(
         body: jsonEncode({'message': 'Lỗi server khi lấy số lượng admin'}),
       );

@@ -15,6 +15,10 @@ class _StudentHomePageState extends State<StudentHomePage> {
   int student = 0;
   int teacher = 0;
   int admin = 0;
+<<<<<<< HEAD
+
+=======
+>>>>>>> a0072a239524841fe073ff58c02f285f61d2b361
   @override
   void initState() {
     super.initState();
@@ -32,9 +36,11 @@ class _StudentHomePageState extends State<StudentHomePage> {
         teacher = teacherCount;
         admin = adminCount;
       });
-    } catch(e) {
+    } catch (e) {
       print("❌ Lỗi khi load số liệu: $e");
       // Có thể thêm SnackBar để hiển thị lỗi cho người dùng
+    } catch (e) {
+      print("Lỗi khi load số liệu: $e");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Lỗi khi tải dữ liệu: ${e.toString()}')),
       );
@@ -68,23 +74,20 @@ class _StudentHomePageState extends State<StudentHomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 StatCard(
-                  title: "Học sinh", 
-                  count: student.toString(), 
-                  icon: Icons.school, 
-                  color: Colors.blue
-                ),
+                    title: "Học sinh",
+                    count: student.toString(),
+                    icon: Icons.school,
+                    color: Colors.blue),
                 StatCard(
-                  title: "Giáo viên", 
-                  count: teacher.toString(), 
-                  icon: Icons.person, 
-                  color: Colors.green
-                ),
+                    title: "Giáo viên",
+                    count: teacher.toString(),
+                    icon: Icons.person,
+                    color: Colors.green),
                 StatCard(
-                  title: "Thông báo", 
-                  count: admin.toString(), 
-                  icon: Icons.notifications, 
-                  color: Colors.orange
-                ),
+                    title: "Thông báo",
+                    count: admin.toString(),
+                    icon: Icons.notifications,
+                    color: Colors.orange),
               ],
             ),
             const SizedBox(height: 24),
@@ -99,7 +102,8 @@ class _StudentHomePageState extends State<StudentHomePage> {
                   QuickAccessCard(
                     title: 'Xem TKB',
                     icon: Icons.calendar_today,
-                    onTap: () => Navigator.pushNamed(context, '/student/timetable'),
+                    onTap: () =>
+                        Navigator.pushNamed(context, '/student/timetable'),
                   ),
                   QuickAccessCard(
                     title: 'Xem điểm',
@@ -109,7 +113,8 @@ class _StudentHomePageState extends State<StudentHomePage> {
                   QuickAccessCard(
                     title: 'Thông báo',
                     icon: Icons.notifications_active,
-                    onTap: () => Navigator.pushNamed(context, '/student/notifications'),
+                    onTap: () =>
+                        Navigator.pushNamed(context, '/student/notifications'),
                   ),
                 ],
               ),
