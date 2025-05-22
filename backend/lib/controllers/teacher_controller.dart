@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:mongo_dart/mongo_dart.dart';
 import 'package:shelf/shelf.dart';
 import 'package:uuid/uuid.dart';
 
@@ -123,6 +124,20 @@ class TeacherController {
       print('❌ Lỗi khi xoá giáo viên: $e\n$stack');
       return Response.internalServerError(
         body: jsonEncode({'message': 'Lỗi server khi xoá giáo viên'}),
+      );
+    }
+  }
+
+  static Future<Response> getTeacherCount(Request req) async {
+    try {
+      final collection = MongoService.db.collection('users');
+      final count = await collection.count({'role': 'teacher'});
+
+      return Response.ok(jsonEncode({'count': count}));
+    } catch (e, stack) {
+      print('❌ Lỗi khi lấy số lượng giáo viên: $e\n$stack');
+      return Response.internalServerError(
+        body: jsonEncode({'message': 'Lỗi server khi lấy số lượng giáo viên'}),
       );
     }
   }

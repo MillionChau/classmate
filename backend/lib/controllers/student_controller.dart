@@ -67,4 +67,18 @@ class StudentController {
       );
     }
   }
+
+  static Future<Response> getStudentCount(Request req) async {
+    try {
+      final collection = MongoService.db.collection('users');
+      final count = await collection.count({'role': 'student'});
+
+      return Response.ok(jsonEncode({'count': count}));
+    } catch (e, stack) {
+      print('❌ Lỗi khi lấy số lượng học sinh: $e\n$stack');
+      return Response.internalServerError(
+        body: jsonEncode({'message': 'Lỗi server khi lấy số lượng học sinh'}),
+      );
+    }
+  }
 }

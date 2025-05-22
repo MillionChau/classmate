@@ -21,7 +21,7 @@ void main() async {
     ..mount('/auth/', authApi)
     ..mount('/students/', studentApi)
     ..mount('/teachers/', teacherApi)
-    ..mount('/admin/', adminApi)
+    ..mount('/admins/', adminApi)
     ..mount('/notification/', notificationApi)
     ..mount('/schedule/', scheduleApi);
 

@@ -1,28 +1,22 @@
 import 'package:flutter/material.dart';
+import '../../widgets/sidebar.dart';
+import '../../widgets/statcard.dart';
+import '../../widgets/quick_access.dart';
+import '../../services/dashboard_service.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class StudentHomePage extends StatefulWidget {
+  const StudentHomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Trang chủ',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const HomePage(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
+  State<StudentHomePage> createState() => _StudentHomePageState();
 }
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class _StudentHomePageState extends State<StudentHomePage> {
+  int student = 0;
+  int teacher = 0;
+  int admin = 0;
 
+<<<<<<< HEAD
   Widget _buildStatCard(
       String title, String count, IconData icon, Color color) {
     return Container(
@@ -58,24 +52,32 @@ class HomePage extends StatelessWidget {
         ],
       ),
     );
+=======
+  @override
+  void initState() {
+    super.initState();
+    loadStats();
+>>>>>>> 814d39281f518b60938b35860c6a3d789cfae7a9
   }
 
-  Widget _buildQuickAccess(String title, IconData icon) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.grey[100],
-        borderRadius: BorderRadius.circular(12),
-      ),
-      padding: const EdgeInsets.symmetric(vertical: 20),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, size: 36, color: Colors.blue),
-          const SizedBox(height: 10),
-          Text(title, style: const TextStyle(fontSize: 16)),
-        ],
-      ),
-    );
+  Future<void> loadStats() async {
+    try {
+      final studentCount = await DashboardService.fetchStudentCount();
+      final teacherCount = await DashboardService.fetchTeacherCount();
+      final adminCount = await DashboardService.fetchAdminCount();
+
+      setState(() {
+        student = studentCount;
+        teacher = teacherCount;
+        admin = adminCount;
+      });
+    } catch(e) {
+      print("❌ Lỗi khi load số liệu: $e");
+      // Có thể thêm SnackBar để hiển thị lỗi cho người dùng
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Lỗi khi tải dữ liệu: ${e.toString()}')),
+      );
+    }
   }
 
   @override
@@ -83,8 +85,16 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Trang chủ'),
-        leading: const Icon(Icons.menu),
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: const Icon(Icons.menu),
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            },
+          ),
+        ),
       ),
+      drawer: const Sidebar(role: 'student'),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -93,33 +103,53 @@ class HomePage extends StatelessWidget {
             const Text('Chào mừng, Học sinh!',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 16),
-
-            // Row số liệu
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildStatCard("Học sinh", "200", Icons.school, Colors.blue),
-                _buildStatCard("Giáo viên", "20", Icons.person, Colors.green),
-                _buildStatCard(
-                    "Thông báo", "5", Icons.notifications, Colors.orange),
+                StatCard(
+                  title: "Học sinh", 
+                  count: student.toString(), 
+                  icon: Icons.school, 
+                  color: Colors.blue
+                ),
+                StatCard(
+                  title: "Giáo viên", 
+                  count: teacher.toString(), 
+                  icon: Icons.person, 
+                  color: Colors.green
+                ),
+                StatCard(
+                  title: "Thông báo", 
+                  count: admin.toString(), 
+                  icon: Icons.notifications, 
+                  color: Colors.orange
+                ),
               ],
             ),
-
             const SizedBox(height: 24),
             const Text('Truy cập nhanh:', style: TextStyle(fontSize: 16)),
             const SizedBox(height: 12),
-
-            // Grid các nút
             Expanded(
               child: GridView.count(
                 crossAxisCount: 2,
                 crossAxisSpacing: 12,
                 mainAxisSpacing: 12,
                 children: [
-                  _buildQuickAccess('Xem TKB', Icons.calendar_today),
-                  _buildQuickAccess('Xem điểm', Icons.star),
-                  _buildQuickAccess(
-                      'Xem thông báo', Icons.notifications_active),
+                  QuickAccessCard(
+                    title: 'Xem TKB',
+                    icon: Icons.calendar_today,
+                    onTap: () => Navigator.pushNamed(context, '/student/timetable'),
+                  ),
+                  QuickAccessCard(
+                    title: 'Xem điểm',
+                    icon: Icons.star,
+                    onTap: () => Navigator.pushNamed(context, '/student/marks'),
+                  ),
+                  QuickAccessCard(
+                    title: 'Thông báo',
+                    icon: Icons.notifications_active,
+                    onTap: () => Navigator.pushNamed(context, '/student/notifications'),
+                  ),
                 ],
               ),
             )
