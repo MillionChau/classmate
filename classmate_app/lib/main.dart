@@ -1,6 +1,4 @@
 // lib/main.dart
-
->>>>>>> 814d39281f518b60938b35860c6a3d789cfae7a9
 import 'package:flutter/material.dart';
 import 'routes/app_routes.dart';
 
