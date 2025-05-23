@@ -15,10 +15,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
   int student = 0;
   int teacher = 0;
   int admin = 0;
-<<<<<<< HEAD
 
-=======
->>>>>>> a0072a239524841fe073ff58c02f285f61d2b361
   @override
   void initState() {
     super.initState();
