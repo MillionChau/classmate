@@ -1,10 +1,15 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter/foundation.dart';
 
 class DashboardService {
+  static final String baseUrl = kIsWeb 
+    ? 'http://localhost:8080'   
+    : 'http://10.0.2.2:8080'; 
+
   static Future<int> fetchStudentCount() async {
     try {
-      final res = await http.get(Uri.parse('http://10.0.2.2:8080/students/count'));
+      final res = await http.get(Uri.parse('${baseUrl}/students/count'));
       
       if (res.statusCode == 200) {
         final data = jsonDecode(res.body);
@@ -19,7 +24,7 @@ class DashboardService {
 
   static Future<int> fetchTeacherCount() async {
     try {
-      final res = await http.get(Uri.parse('http://10.0.2.2:8080/teachers/count'));
+      final res = await http.get(Uri.parse('${baseUrl}/teachers/count'));
 
       if(res.statusCode == 200) {
         final data = jsonDecode(res.body);
@@ -34,7 +39,7 @@ class DashboardService {
 
   static Future<int> fetchAdminCount() async {
     try {
-      final res = await http.get(Uri.parse('http://l10.0.2.2:8080/admins/count'));
+      final res = await http.get(Uri.parse('${baseUrl}/admins/count'));
 
       if(res.statusCode == 200) {
         final data = jsonDecode(res.body);
@@ -42,8 +47,21 @@ class DashboardService {
       }
       throw Exception('Lỗi khi lấy số lượng admin. Status code: ${res.statusCode}');
     } catch(e) {
-      print('Lỗi kết nối');
-      throw Exception('Lỗi khi lấy số lượng giáo viên');
+      throw Exception('Lỗi khi lấy số lượng admin');
+    }
+  }
+
+  static Future<int> fetchNotificationsCount() async {
+    try {
+      final res = await http.get(Uri.parse('${baseUrl}/notification/count'));
+
+      if(res.statusCode == 200) {
+        final data = jsonDecode(res.body);
+        return data['count'];
+      }
+      throw Exception('Lỗi khi lấy số lượng thông báo. Status code: ${res.statusCode}');
+    } catch(e) {
+      throw Exception('Lỗi khi lấy số lượng thông báo');
     }
   }
 }

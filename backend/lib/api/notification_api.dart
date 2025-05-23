@@ -8,6 +8,7 @@ Router get notificationApi {
   router.get('/read', NotificationController.getAllNotifications);
   router.patch('/approve/<id>', NotificationController.approveNotification);
   router.delete('/delete/<id>', NotificationController.removedNotification);
+  router.get('/count', NotificationController.getAllNotificationCount);
 
   return router;
 }

@@ -1,19 +1,5 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(ThoiKhoaBieuApp());
-}
-
-class ThoiKhoaBieuApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: ThoiKhoaBieuScreen(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
-}
-
 class ThoiKhoaBieuScreen extends StatelessWidget {
   final List<String> tkbList = [
     'Thứ Hai: Toán - Văn - Anh',
@@ -26,9 +12,6 @@ class ThoiKhoaBieuScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(
-          // Drawer rỗng
-          ),
       appBar: AppBar(
         title: Text('Xem thời khóa biểu'),
         backgroundColor: Colors.deepPurple.shade100,
@@ -37,6 +20,10 @@ class ThoiKhoaBieuScreen extends StatelessWidget {
           color: Colors.black,
           fontSize: 20,
           fontWeight: FontWeight.bold,
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
         ),
         elevation: 0,
       ),

@@ -1,20 +1,19 @@
 import 'dart:convert';
 import 'package:backend/models/notification.dart';
 import 'package:shelf/shelf.dart';
-
 import '../services/mongo_service.dart';
 
 class NotificationController {
-  static Future<Response> sendNotification(Request req) async {
+ static Future<Response> sendNotification(Request req) async {
     try {
       final payload = await req.readAsString();
       final data = jsonDecode(payload);
 
       final title = data['title']?.toString();
       final description = data['description']?.toString();
-      final createBy = data['createBy']?.toString();
+      final createdBy = data['createdBy']?.toString();
 
-      if (title == null || description == null || createBy == null) {
+      if (title == null || description == null || createdBy == null) {
         return Response.badRequest(
           body: jsonEncode({'message': 'Thiếu thông tin thông báo'}),
         );
@@ -32,18 +31,21 @@ class NotificationController {
 
       final id = '$prefix-${(count + 1).toString().padLeft(3, '0')}';
 
-      final notification = Notification( 
+      final notification = Notification(
         id: id,
         title: title,
         description: description,
-        createdBy: createBy,
+        createdBy: createdBy,
         status: 'pending',
         createdAt: now,
       );
 
       await collection.insertOne(notification.toMap());
 
-      return Response.ok(jsonEncode({'message': 'Gửi thông báo thành công!'}));
+      return Response.ok(jsonEncode({
+        'message': 'Gửi thông báo thành công!',
+        'notification': notification.toMap()
+      }));
     } catch (e, stack) {
       print('Lỗi khi gửi thông báo: $e\n$stack');
       return Response.internalServerError(
@@ -61,6 +63,23 @@ class NotificationController {
           .toList();
 
       return Response.ok(jsonEncode(approvedNotifications));
+    } catch (e, stack) {
+      print('Lỗi khi lấy thông báo: $e\n$stack');
+      return Response.internalServerError(
+        body: jsonEncode({'message': 'Lỗi server khi lấy thông báo'}),
+      );
+    }
+  }
+
+  static Future<Response> getNotificationPending(Request req) async {
+    try {
+      final collection = MongoService.db.collection('notifications');
+
+      final pendingNotifications = await collection
+          .find({'status': 'pending'})
+          .toList();
+
+      return Response.ok(jsonEncode(pendingNotifications));
     } catch (e, stack) {
       print('Lỗi khi lấy thông báo: $e\n$stack');
       return Response.internalServerError(
@@ -111,13 +130,27 @@ class NotificationController {
         );
       }
 
-      await collection.deleteOne({'id': id}); // dùng deleteOne thay vì remove
+      await collection.deleteOne({'id': id});
 
-      return Response.ok(jsonEncode({'message': 'Xoá thông báo thành công'})); // ❗ return ở đây!
+      return Response.ok(jsonEncode({'message': 'Xoá thông báo thành công'}));
     } catch (e, stack) {
       print('Lỗi khi xoá thông báo: $e\n$stack');
       return Response.internalServerError(
         body: jsonEncode({'message': 'Lỗi server khi xoá thông báo'}),
+      );
+    }
+  }
+
+  static Future<Response> getAllNotificationCount(Request req) async {
+    try {
+      final collection = await MongoService.db.collection('notifications');
+      final count = await collection.count({'status': 'approved'});
+
+      return Response.ok(jsonEncode({'count': count}));
+    } catch (e, stack) {
+      print('Lỗi khi lấy số lượng giáo viên: $e\n$stack');
+      return Response.internalServerError(
+        body: jsonEncode({'message': 'Lỗi server khi lấy số lượng giáo viên'}),
       );
     }
   }

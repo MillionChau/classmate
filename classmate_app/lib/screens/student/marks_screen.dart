@@ -1,19 +1,5 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(DiemSoApp());
-}
-
-class DiemSoApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: DiemSoScreen(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
-}
-
 class DiemSoScreen extends StatefulWidget {
   @override
   _DiemSoScreenState createState() => _DiemSoScreenState();
@@ -51,9 +37,6 @@ class _DiemSoScreenState extends State<DiemSoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(
-          // Drawer rỗng
-          ),
       appBar: AppBar(
         title: Text('Xem điểm số'),
         backgroundColor: Colors.deepPurple.shade100,
@@ -62,6 +45,10 @@ class _DiemSoScreenState extends State<DiemSoScreen> {
           color: Colors.black,
           fontSize: 20,
           fontWeight: FontWeight.bold,
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
         ),
         elevation: 0,
       ),

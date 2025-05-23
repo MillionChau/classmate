@@ -3,18 +3,20 @@ import '../../widgets/sidebar.dart';
 import '../../widgets/statcard.dart';
 import '../../widgets/quick_access.dart';
 import '../../services/dashboard_service.dart';
+import '../../provider/user_provider.dart';
+import 'package:provider/provider.dart';
 
-class StudentHomePage extends StatefulWidget {
-  const StudentHomePage({super.key});
+class TeacherHomePage extends StatefulWidget {
+  const TeacherHomePage({super.key});
 
   @override
-  State<StudentHomePage> createState() => _StudentHomePageState();
+  State<TeacherHomePage> createState() => _TeacherHomePageState();
 }
 
-class _StudentHomePageState extends State<StudentHomePage> {
+class _TeacherHomePageState extends State<TeacherHomePage> {
   int student = 0;
   int teacher = 0;
-  int admin = 0;
+  int notification = 0;
   @override
   void initState() {
     super.initState();
@@ -25,12 +27,12 @@ class _StudentHomePageState extends State<StudentHomePage> {
     try {
       final studentCount = await DashboardService.fetchStudentCount();
       final teacherCount = await DashboardService.fetchTeacherCount();
-      final adminCount = await DashboardService.fetchAdminCount();
+      final notificationCount = await DashboardService.fetchNotificationsCount();
 
       setState(() {
         student = studentCount;
         teacher = teacherCount;
-        admin = adminCount;
+        notification = notificationCount;
       });
     } catch(e) {
       print("Lỗi khi load số liệu: $e");
@@ -42,47 +44,51 @@ class _StudentHomePageState extends State<StudentHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+    final username = userProvider.username ?? 'Người dùng';
+    final role = userProvider.role ?? 'Vai trò';
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Trang chủ'),
         leading: Builder(
           builder: (context) => IconButton(
             icon: const Icon(Icons.menu),
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
+            onPressed: () => Scaffold.of(context).openDrawer(),
           ),
         ),
       ),
-      drawer: const Sidebar(role: 'student'),
+      drawer: Sidebar(role: role),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Chào mừng, Học sinh!',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            Text(
+              'Chào mừng, $username!',
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 StatCard(
-                  title: "Học sinh", 
-                  count: student.toString(), 
-                  icon: Icons.school, 
-                  color: Colors.blue
+                  title: "Học sinh",
+                  count: student.toString(),
+                  icon: Icons.school,
+                  color: Colors.blue,
                 ),
                 StatCard(
-                  title: "Giáo viên", 
-                  count: teacher.toString(), 
-                  icon: Icons.person, 
-                  color: Colors.green
+                  title: "Giáo viên",
+                  count: teacher.toString(),
+                  icon: Icons.person,
+                  color: Colors.green,
                 ),
                 StatCard(
-                  title: "Thông báo", 
-                  count: admin.toString(), 
-                  icon: Icons.notifications, 
-                  color: Colors.orange
+                  title: "Thông báo",
+                  count: notification.toString(),
+                  icon: Icons.notifications,
+                  color: Colors.orange,
                 ),
               ],
             ),
@@ -97,18 +103,18 @@ class _StudentHomePageState extends State<StudentHomePage> {
                 children: [
                   QuickAccessCard(
                     title: 'Xem lịch giảng',
-                    icon: Icons.calendar_today,
-                    onTap: () => Navigator.pushNamed(context, '/student/timetable'),
+                    icon: Icons.access_alarm,
+                    onTap: () => Navigator.pushNamed(context, '/teacher/schedule'),
                   ),
                   QuickAccessCard(
                     title: 'Nhập điểm',
-                    icon: Icons.star,
-                    onTap: () => Navigator.pushNamed(context, '/student/marks'),
+                    icon: Icons.edit,
+                    onTap: () => Navigator.pushNamed(context, '/teacher/enter-marks'),
                   ),
                   QuickAccessCard(
                     title: 'Gửi thông báo',
-                    icon: Icons.notifications_active,
-                    onTap: () => Navigator.pushNamed(context, '/student/notifications'),
+                    icon: Icons.notifications,
+                    onTap: () => Navigator.pushNamed(context, '/teacher/notification-request'),
                   ),
                 ],
               ),
