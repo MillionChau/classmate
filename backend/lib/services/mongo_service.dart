@@ -4,7 +4,7 @@ class MongoService {
   static Db? _db;
 
   static Future<void> connect() async {
-  _db = await Db.create("mongodb://localhost:27017/classmate_db");
+  _db = await Db.create("mongodb+srv://shopee-sentiment:MChau2506@cluster0.qlbix.mongodb.net/classmate_db");
   await _db!.open();
   print('MongoDB connected');
   }

@@ -4,13 +4,53 @@ import '../admin/student_screen.dart';
 import '../admin/teacher_screen.dart';
 import 'package:flutter/material.dart';
 import '../../widgets/admin_draw.dart';
+import '../../services/dashboard_service.dart';
+import '../../provider/user_provider.dart';
+import '../../services/auth_service.dart';
+import 'package:provider/provider.dart';
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
+
+  @override
+  State<DashboardScreen> createState() => _DashboardScreenState(); 
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+  int student = 0;
+  int teacher = 0;
+  int notification = 0;
+  @override
+  void initState() {
+    super.initState();
+    loadStats();
+  }
+
+  Future<void> loadStats() async {
+    try {
+      final studentCount = await DashboardService.fetchStudentCount();
+      final teacherCount = await DashboardService.fetchTeacherCount();
+      final notificationCount = await DashboardService.fetchNotificationsCount();
+
+      setState(() {
+        student = studentCount;
+        teacher = teacherCount;
+        notification = notificationCount;
+      });
+    } catch(e) {
+      print("Lỗi khi load số liệu: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Lỗi khi tải dữ liệu: ${e.toString()}')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final userProvider = Provider.of<UserProvider>(context);
+    final role = userProvider.role ?? 'teacher';
+    final name = userProvider.username ?? 'Người dùng';
 
     return Scaffold(
       drawer: const AdminDrawer(),
@@ -30,8 +70,8 @@ class DashboardScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Chào mừng, Admin!',
+            Text(
+              'Chào mừng, $name',
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
@@ -50,7 +90,7 @@ class DashboardScreen extends StatelessWidget {
                     );
                   },
                   child: _buildStatCard(
-                    count: 20,
+                    count: student,
                     label: 'Học sinh',
                     icon: Icons.school,
                     color: Colors.blue,
@@ -66,7 +106,7 @@ class DashboardScreen extends StatelessWidget {
                     );
                   },
                   child: _buildStatCard(
-                    count: 10,
+                    count: teacher,
                     label: 'Giáo viên',
                     icon: Icons.people,
                     color: const Color.fromARGB(255, 102, 220, 161),
@@ -82,7 +122,7 @@ class DashboardScreen extends StatelessWidget {
                     );
                   },
                   child: _buildStatCard(
-                    count: 5,
+                    count: notification,
                     label: 'Thông báo',
                     icon: Icons.notifications,
                     color: const Color.fromARGB(255, 228, 178, 90),
@@ -158,7 +198,7 @@ class DashboardScreen extends StatelessWidget {
         ),
       ),
     );
-  }
+}
 
   Widget _buildStatCard({
     required int count,

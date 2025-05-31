@@ -1,8 +1,8 @@
 class Student {
-  final String id;
-  final String name;
-  final String className;
-  final String password;
+  final String? id;
+  final String? name;
+  final String? className;
+  final String? password;
 
   Student({
     required this.id,

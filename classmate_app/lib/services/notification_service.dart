@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../models/notification.dart'; // Import model Notification
+import '../models/notification.dart';
 
 class NotificationService {
   final String baseUrl;

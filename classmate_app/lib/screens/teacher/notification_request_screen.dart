@@ -128,7 +128,6 @@ class _TeacherNotificationState extends State<TeacherNotification> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
-    final username = userProvider.username ?? 'Người dùng';
     final role = userProvider.role ?? 'Vai trò';
 
     return Scaffold(
