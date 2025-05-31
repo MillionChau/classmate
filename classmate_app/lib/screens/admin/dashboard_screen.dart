@@ -3,10 +3,8 @@ import '../admin/manage_accouts_screen.dart';
 import '../admin/student_screen.dart';
 import '../admin/teacher_screen.dart';
 import 'package:flutter/material.dart';
-import '../../widgets/admin_draw.dart';
 import '../../services/dashboard_service.dart';
 import '../../provider/user_provider.dart';
-import '../../services/auth_service.dart';
 import 'package:provider/provider.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -53,7 +51,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final name = userProvider.username ?? 'Người dùng';
 
     return Scaffold(
-      drawer: const AdminDrawer(),
+      // drawer: const AdminDrawer(),
       appBar: AppBar(
         title: const Text("Trang chủ"),
         leading: Builder(

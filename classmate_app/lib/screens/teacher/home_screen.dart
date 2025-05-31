@@ -3,8 +3,14 @@ import '../../widgets/sidebar.dart';
 import '../../widgets/statcard.dart';
 import '../../widgets/quick_access.dart';
 import '../../services/dashboard_service.dart';
+<<<<<<< HEAD
+import 'package:provider/provider.dart';
+import '../../providers/user_provider.dart';
+import '../../services/auth_service.dart';
+=======
 import '../../provider/user_provider.dart';
 import 'package:provider/provider.dart';
+>>>>>>> 8bd2927b1d48cdb2771c0909822b43e2f65919d4
 
 class TeacherHomePage extends StatefulWidget {
   const TeacherHomePage({super.key});
@@ -16,11 +22,50 @@ class TeacherHomePage extends StatefulWidget {
 class _TeacherHomePageState extends State<TeacherHomePage> {
   int student = 0;
   int teacher = 0;
+<<<<<<< HEAD
+  int admin = 0;
+
+=======
   int notification = 0;
+>>>>>>> 8bd2927b1d48cdb2771c0909822b43e2f65919d4
   @override
   void initState() {
     super.initState();
     loadStats();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _verifyUserData(); // sẽ gọi loadUserData nếu cần
+    });
+  }
+
+
+  void _verifyUserData() async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    await userProvider.loadUserData();
+    
+    if (userProvider.name == null || userProvider.role == null) {
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, '/login');
+      }
+    }
+  }
+
+
+  Future<void> loadUserData() async {
+    try {
+      final userData = await AuthService.getCurrentUser();
+      if (userData != null && mounted) {
+        final userProvider = Provider.of<UserProvider>(context, listen: false);
+        userProvider.setUser(userData['name'], userData['role']);
+      }
+    } catch (e) {
+      print("Lỗi khi load thông tin user: $e");
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Lỗi khi tải thông tin người dùng: ${e.toString()}')),
+        );
+      }
+    }
   }
 
   Future<void> loadStats() async {
@@ -36,21 +81,28 @@ class _TeacherHomePageState extends State<TeacherHomePage> {
       });
     } catch(e) {
       print("Lỗi khi load số liệu: $e");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Lỗi khi tải dữ liệu: ${e.toString()}')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Lỗi khi tải dữ liệu: ${e.toString()}')),
+        );
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
+<<<<<<< HEAD
+    final userName = userProvider.name ?? 'Giáo viên';
+    final userRole = userProvider.role ?? 'teacher';
+=======
     final username = userProvider.username ?? 'Người dùng';
     final role = userProvider.role ?? 'Vai trò';
+>>>>>>> 8bd2927b1d48cdb2771c0909822b43e2f65919d4
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Trang chủ'),
+        title: const Text('Trang chủ Giáo viên'),
         leading: Builder(
           builder: (context) => IconButton(
             icon: const Icon(Icons.menu),
@@ -58,16 +110,25 @@ class _TeacherHomePageState extends State<TeacherHomePage> {
           ),
         ),
       ),
+<<<<<<< HEAD
+      drawer: Sidebar(role: userRole),
+=======
       drawer: Sidebar(role: role),
+>>>>>>> 8bd2927b1d48cdb2771c0909822b43e2f65919d4
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+<<<<<<< HEAD
+            Text('Chào mừng, $userName!',
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+=======
             Text(
               'Chào mừng, $username!',
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
+>>>>>>> 8bd2927b1d48cdb2771c0909822b43e2f65919d4
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -103,6 +164,20 @@ class _TeacherHomePageState extends State<TeacherHomePage> {
                 children: [
                   QuickAccessCard(
                     title: 'Xem lịch giảng',
+<<<<<<< HEAD
+                    icon: Icons.calendar_today,
+                    onTap: () => Navigator.pushNamed(context, '/teacher/timetable'),
+                  ),
+                  QuickAccessCard(
+                    title: 'Nhập điểm',
+                    icon: Icons.star,
+                    onTap: () => Navigator.pushNamed(context, '/teacher/marks'),
+                  ),
+                  QuickAccessCard(
+                    title: 'Gửi thông báo',
+                    icon: Icons.notifications_active,
+                    onTap: () => Navigator.pushNamed(context, '/teacher/notifications'),
+=======
                     icon: Icons.access_alarm,
                     onTap: () => Navigator.pushNamed(context, '/teacher/schedule'),
                   ),
@@ -115,6 +190,7 @@ class _TeacherHomePageState extends State<TeacherHomePage> {
                     title: 'Gửi thông báo',
                     icon: Icons.notifications,
                     onTap: () => Navigator.pushNamed(context, '/teacher/notification-request'),
+>>>>>>> 8bd2927b1d48cdb2771c0909822b43e2f65919d4
                   ),
                 ],
               ),
