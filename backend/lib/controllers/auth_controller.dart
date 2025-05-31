@@ -16,7 +16,7 @@ class AuthController {
 
     final collection = MongoService.db.collection('users');
 
-    // Tìm theo username hoặc name (dùng $or)
+    // Tìm theo username hoặc name
     final user = await collection.findOne({
       r'$or': [
         {'username': input},
@@ -27,9 +27,10 @@ class AuthController {
 
     if (user != null) {
       return Response.ok(jsonEncode({
-        'message': 'Login success',
-        'role': user['role'],
-      }));
+      'message': 'Login success',
+      'role': user['role'],
+      'name': user['name'],
+  }));
     } else {
       return Response.forbidden(jsonEncode({'message': 'Tài khoản hoặc mật khẩu sai'}));
     }

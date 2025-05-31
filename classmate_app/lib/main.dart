@@ -1,9 +1,6 @@
-<<<<<<< HEAD
-// lib/main.dart
-=======
-import 'package:classmate_app/screens/admin/dashboard_screen.dart';
->>>>>>> a0072a239524841fe073ff58c02f285f61d2b361
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:classmate_app/providers/user_provider.dart'; // Import UserProvider
 import 'routes/app_routes.dart';
 
 void main() {
@@ -15,13 +12,14 @@ class ClassMateApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: HomePage(),
-      title: 'ClassMate',
-      debugShowCheckedModeBanner: false,
-
-      //initialRoute: AppRoutes.login,
-      //routes: AppRoutes.routes,
+    return ChangeNotifierProvider(
+      create: (context) => UserProvider()..loadUserData(),
+      child: MaterialApp(
+        title: 'ClassMate',
+        debugShowCheckedModeBanner: false,
+        initialRoute: AppRoutes.login,
+        routes: AppRoutes.routes,
+      ),
     );
   }
 }

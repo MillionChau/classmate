@@ -3,22 +3,60 @@ import '../../widgets/sidebar.dart';
 import '../../widgets/statcard.dart';
 import '../../widgets/quick_access.dart';
 import '../../services/dashboard_service.dart';
+import 'package:provider/provider.dart';
+import '../../providers/user_provider.dart';
+import '../../services/auth_service.dart';
 
-class StudentHomePage extends StatefulWidget {
-  const StudentHomePage({super.key});
+class TeacherHomePage extends StatefulWidget {
+  const TeacherHomePage({super.key});
 
   @override
-  State<StudentHomePage> createState() => _StudentHomePageState();
+  State<TeacherHomePage> createState() => _TeacherHomePageState();
 }
 
-class _StudentHomePageState extends State<StudentHomePage> {
+class _TeacherHomePageState extends State<TeacherHomePage> {
   int student = 0;
   int teacher = 0;
   int admin = 0;
+
   @override
   void initState() {
     super.initState();
     loadStats();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _verifyUserData(); // sẽ gọi loadUserData nếu cần
+    });
+  }
+
+
+  void _verifyUserData() async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    await userProvider.loadUserData();
+    
+    if (userProvider.name == null || userProvider.role == null) {
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, '/login');
+      }
+    }
+  }
+
+
+  Future<void> loadUserData() async {
+    try {
+      final userData = await AuthService.getCurrentUser();
+      if (userData != null && mounted) {
+        final userProvider = Provider.of<UserProvider>(context, listen: false);
+        userProvider.setUser(userData['name'], userData['role']);
+      }
+    } catch (e) {
+      print("Lỗi khi load thông tin user: $e");
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Lỗi khi tải thông tin người dùng: ${e.toString()}')),
+        );
+      }
+    }
   }
 
   Future<void> loadStats() async {
@@ -34,17 +72,23 @@ class _StudentHomePageState extends State<StudentHomePage> {
       });
     } catch(e) {
       print("Lỗi khi load số liệu: $e");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Lỗi khi tải dữ liệu: ${e.toString()}')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Lỗi khi tải dữ liệu: ${e.toString()}')),
+        );
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+    final userName = userProvider.name ?? 'Giáo viên';
+    final userRole = userProvider.role ?? 'teacher';
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Trang chủ'),
+        title: const Text('Trang chủ Giáo viên'),
         leading: Builder(
           builder: (context) => IconButton(
             icon: const Icon(Icons.menu),
@@ -54,14 +98,14 @@ class _StudentHomePageState extends State<StudentHomePage> {
           ),
         ),
       ),
-      drawer: const Sidebar(role: 'student'),
+      drawer: Sidebar(role: userRole),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Chào mừng, Học sinh!',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            Text('Chào mừng, $userName!',
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -98,17 +142,17 @@ class _StudentHomePageState extends State<StudentHomePage> {
                   QuickAccessCard(
                     title: 'Xem lịch giảng',
                     icon: Icons.calendar_today,
-                    onTap: () => Navigator.pushNamed(context, '/student/timetable'),
+                    onTap: () => Navigator.pushNamed(context, '/teacher/timetable'),
                   ),
                   QuickAccessCard(
                     title: 'Nhập điểm',
                     icon: Icons.star,
-                    onTap: () => Navigator.pushNamed(context, '/student/marks'),
+                    onTap: () => Navigator.pushNamed(context, '/teacher/marks'),
                   ),
                   QuickAccessCard(
                     title: 'Gửi thông báo',
                     icon: Icons.notifications_active,
-                    onTap: () => Navigator.pushNamed(context, '/student/notifications'),
+                    onTap: () => Navigator.pushNamed(context, '/teacher/notifications'),
                   ),
                 ],
               ),

@@ -1,10 +1,7 @@
 import 'dart:convert';
-<<<<<<< HEAD
-// ignore: depend_on_referenced_packages
-=======
 import 'package:flutter/foundation.dart';
->>>>>>> adb3a119d92a5467da51201f413a2b96da69b4bb
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
   static final String baseUrl = kIsWeb 
@@ -23,9 +20,39 @@ class AuthService {
     );
 
     if (response.statusCode == 200) {
-      return jsonDecode(response.body);
+      final data = jsonDecode(response.body);
+      // Lưu thông tin user vào SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('userData', jsonEncode({
+        'name': data['name'],
+        'role': data['role']
+      }));
+      return {
+        'message': data['message'],
+        'role': data['role'],
+        'name': data['name'],
+      };
     } else {
       throw Exception('Đăng nhập thất bại');
     }
+  }
+
+  static Future<Map<String, dynamic>?> getCurrentUser() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final userDataString = prefs.getString('userData');
+      if (userDataString != null) {
+        return jsonDecode(userDataString);
+      }
+      return null;
+    } catch (e) {
+      print('Lỗi khi lấy thông tin user: $e');
+      return null;
+    }
+  }
+
+  static Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('userData');
   }
 }

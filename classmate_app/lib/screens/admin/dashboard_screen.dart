@@ -13,7 +13,7 @@ class DashboardScreen extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      drawer: const AdminDrawer(),
+      // drawer: const AdminDrawer(),
       appBar: AppBar(
         title: const Text("Trang chủ"),
         leading: Builder(

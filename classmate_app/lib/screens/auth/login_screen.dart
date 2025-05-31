@@ -46,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Navigator.pushReplacementNamed(context, AppRoutes.studentHome);
               break;
             case 'teacher':
-              Navigator.pushReplacementNamed(context, AppRoutes.login);
+              Navigator.pushReplacementNamed(context, AppRoutes.teacherHome);
               break;
             case 'admin':
               Navigator.pushReplacementNamed(context, AppRoutes.login);
