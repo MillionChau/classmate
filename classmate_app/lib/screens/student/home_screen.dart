@@ -3,6 +3,8 @@ import '../../widgets/sidebar.dart';
 import '../../widgets/statcard.dart';
 import '../../widgets/quick_access.dart';
 import '../../services/dashboard_service.dart';
+import '../../provider/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class StudentHomePage extends StatefulWidget {
   const StudentHomePage({super.key});
@@ -14,8 +16,7 @@ class StudentHomePage extends StatefulWidget {
 class _StudentHomePageState extends State<StudentHomePage> {
   int student = 0;
   int teacher = 0;
-  int admin = 0;
-
+  int notification = 0;
   @override
   void initState() {
     super.initState();
@@ -26,17 +27,14 @@ class _StudentHomePageState extends State<StudentHomePage> {
     try {
       final studentCount = await DashboardService.fetchStudentCount();
       final teacherCount = await DashboardService.fetchTeacherCount();
-      final adminCount = await DashboardService.fetchAdminCount();
+      final notificationCount = await DashboardService.fetchNotificationsCount();
 
       setState(() {
         student = studentCount;
         teacher = teacherCount;
-        admin = adminCount;
+        notification = notificationCount;
       });
-    } catch (e) {
-      print("❌ Lỗi khi load số liệu: $e");
-      // Có thể thêm SnackBar để hiển thị lỗi cho người dùng
-    } catch (e) {
+    } catch(e) {
       print("Lỗi khi load số liệu: $e");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Lỗi khi tải dữ liệu: ${e.toString()}')),
@@ -46,45 +44,52 @@ class _StudentHomePageState extends State<StudentHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+    final username = userProvider.username ?? 'Người dùng';
+    final role = userProvider.role ?? 'Vai trò';
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Trang chủ'),
         leading: Builder(
           builder: (context) => IconButton(
             icon: const Icon(Icons.menu),
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
+            onPressed: () => Scaffold.of(context).openDrawer(),
           ),
         ),
       ),
-      drawer: const Sidebar(role: 'student'),
+      drawer: Sidebar(role: role),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Chào mừng, Học sinh!',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            Text(
+              'Chào mừng, $username!',
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 StatCard(
-                    title: "Học sinh",
-                    count: student.toString(),
-                    icon: Icons.school,
-                    color: Colors.blue),
+                  title: "Học sinh",
+                  count: student.toString(),
+                  icon: Icons.school,
+                  color: Colors.blue,
+                ),
                 StatCard(
-                    title: "Giáo viên",
-                    count: teacher.toString(),
-                    icon: Icons.person,
-                    color: Colors.green),
+                  title: "Giáo viên",
+                  count: teacher.toString(),
+                  icon: Icons.person,
+                  color: Colors.green,
+                ),
                 StatCard(
-                    title: "Thông báo",
-                    count: admin.toString(),
-                    icon: Icons.notifications,
-                    color: Colors.orange),
+                  title: "Thông báo",
+                  count: notification.toString(),
+                  icon: Icons.notifications,
+                  color: Colors.orange,
+                ),
               ],
             ),
             const SizedBox(height: 24),
@@ -99,8 +104,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
                   QuickAccessCard(
                     title: 'Xem TKB',
                     icon: Icons.calendar_today,
-                    onTap: () =>
-                        Navigator.pushNamed(context, '/student/timetable'),
+                    onTap: () => Navigator.pushNamed(context, '/student/timetable'),
                   ),
                   QuickAccessCard(
                     title: 'Xem điểm',
@@ -108,10 +112,9 @@ class _StudentHomePageState extends State<StudentHomePage> {
                     onTap: () => Navigator.pushNamed(context, '/student/marks'),
                   ),
                   QuickAccessCard(
-                    title: 'Thông báo',
+                    title: 'Xem thông báo',
                     icon: Icons.notifications_active,
-                    onTap: () =>
-                        Navigator.pushNamed(context, '/student/notifications'),
+                    onTap: () => Navigator.pushNamed(context, '/student/notifications'),
                   ),
                 ],
               ),

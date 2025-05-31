@@ -3,6 +3,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../../../routes/app_routes.dart';
+import 'package:provider/provider.dart';
+import '../../provider/user_provider.dart';
+import '../../services/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -26,22 +29,27 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() => _isLoading = true);
 
       try {
-        final response = await http.post(
-          Uri.parse('$baseUrl/login'),
-          headers: {'Content-Type': 'application/json'},
-          body: jsonEncode({
-            'username': _usernameController.text.trim(),
-            'password': _passwordController.text.trim(),
-          }),
+        final result = await AuthService.login(
+          _usernameController.text,
+          _passwordController.text,
         );
 
         setState(() => _isLoading = false);
 
-        if (response.statusCode == 200) {
-          final result = jsonDecode(response.body);
-          final role = result['role'];
+        if (result['success']) {
+          final user = result['data']['user'];
+          final token = result['data']['access_token'];
 
-          switch (role) {
+          final userProvider = Provider.of<UserProvider>(context, listen: false);
+          userProvider.setUserData(
+            userId: user['id'],
+            username: user['name'],
+            role: user['role'],
+            fullName: user['name'],
+            token: token,
+          );
+
+          switch (user['role']) {
             case 'student':
               Navigator.pushReplacementNamed(context, AppRoutes.studentHome);
               break;
@@ -49,14 +57,13 @@ class _LoginScreenState extends State<LoginScreen> {
               Navigator.pushReplacementNamed(context, AppRoutes.teacherHome);
               break;
             case 'admin':
-              Navigator.pushReplacementNamed(context, AppRoutes.login);
+              Navigator.pushReplacementNamed(context, AppRoutes.adminDashboard);
               break;
             default:
               _showMessage('Không xác định được vai trò!');
           }
         } else {
-          final error = jsonDecode(response.body)['message'];
-          _showMessage(error);
+          _showMessage(result['message']);
         }
       } catch (e) {
         setState(() => _isLoading = false);
@@ -64,6 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     }
   }
+
 
   void _showMessage(String message) {
     ScaffoldMessenger.of(context).showSnackBar(

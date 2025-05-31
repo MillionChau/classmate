@@ -15,18 +15,19 @@ class Admin {
     return {
       'id': id,
       'name': name,
-      'posotion': position,
+      'position': position,
       'password': password,
       'role': 'admin',
     };
   }
 
-  static fromMap(Map<String, dynamic> map) {
+  static Admin fromMap(Map<String, dynamic> map) {
     return Admin(
-      id: map['id'],
-      name: map['name'],
-      position: map['position'],
-      password: map['password']
+      id: map['id']?.toString() ?? '',
+      name: map['name'] ?? '',
+      position: map['position'] ?? '',
+      password: map['password'] ?? '',
     );
   }
+
 }

@@ -1,4 +1,4 @@
-class Notification {
+class AppNotification {
   final String id;
   final String title;
   final String description;
@@ -6,7 +6,7 @@ class Notification {
   final String status;
   final DateTime createdAt;
 
-  Notification({
+  AppNotification({
     required this.id,
     required this.title,
     required this.description,
@@ -26,8 +26,8 @@ class Notification {
     };
   }
 
-  static Notification fromMap(Map<String, dynamic> map) {
-    return Notification(
+  static AppNotification fromMap(Map<String, dynamic> map) {
+    return AppNotification(
       id: map['id'],
       title: map['title'],
       description: map['description'],
