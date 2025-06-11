@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class DiemSoScreen extends StatefulWidget {
+  const DiemSoScreen({super.key});
+
   @override
   _DiemSoScreenState createState() => _DiemSoScreenState();
 }

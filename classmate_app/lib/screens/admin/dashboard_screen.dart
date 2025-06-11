@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../../services/dashboard_service.dart';
 import '../../provider/user_provider.dart';
 import 'package:provider/provider.dart';
+import '../../widgets/admin_draw.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -47,11 +48,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final userProvider = Provider.of<UserProvider>(context);
-    final role = userProvider.role ?? 'teacher';
-    final name = userProvider.username ?? 'Người dùng';
+    final name = userProvider.username ?? 'Admin';
 
     return Scaffold(
-      // drawer: const AdminDrawer(),
+      drawer: const AdminDrawer(),
       appBar: AppBar(
         title: const Text("Trang chủ"),
         leading: Builder(

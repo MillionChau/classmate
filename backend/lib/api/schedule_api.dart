@@ -11,6 +11,7 @@ Router get scheduleApi {
   router.get('/class/<classId>', ScheduleController.getScheduleByClass);
   router.get('/class/<classId>/week/<week>', ScheduleController.getScheduleByClassAndWeek);
   router.get('/teacher/<teacherId>', ScheduleController.getScheduleByTeacher);
+  router.get('/schedules', ScheduleController.getAllSchedules);
 
   return router;
 }

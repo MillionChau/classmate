@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../widgets/sidebar.dart';
 import '../../provider/user_provider.dart';
 import '../../services/notification_service.dart';
 import '../../models/notification.dart';
@@ -55,35 +54,33 @@ class _TeacherNotificationState extends State<TeacherNotification> {
   Future<void> _addNotification(BuildContext context) async {
     final title = _titleController.text;
     final desc = _descController.text;
-    if (title.isNotEmpty && desc.isNotEmpty) {
-      try {
-        final userProvider = Provider.of<UserProvider>(context, listen: false);
-        final userId = userProvider.userId?? '';
-        if (userId.isEmpty) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Không tìm thấy thông tin người dùng')),
-          );
-          return;
-        }
+    if (title.isEmpty || desc.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Vui lòng nhập đầy đủ tiêu đề và nội dung')),
+      );
+      return;
+    }
 
-        final newNotification = await _notificationService.sendNotification(
-          title: title,
-          desc: desc,
-          userId: userId,
-        );
-
-        setState(() {
-          _notifications.add(newNotification);
-        });
-
-        _titleController.clear();
-        _descController.clear();
-        Navigator.of(context).pop();
-      } catch (e) {
+    try {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      final userId = userProvider.userId ?? '';
+      if (userId.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Lỗi khi thêm thông báo: $e')),
+          const SnackBar(content: Text('Không tìm thấy thông tin người dùng')),
         );
+        return;
       }
+
+      _titleController.clear();
+      _descController.clear();
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Bạn đã gửi thông báo tới phía quản trị viên!')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Lỗi khi thêm thông báo: $e')),
+      );
     }
   }
 
@@ -104,6 +101,7 @@ class _TeacherNotificationState extends State<TeacherNotification> {
               TextField(
                 controller: _descController,
                 decoration: const InputDecoration(labelText: 'Nội dung thông báo'),
+                maxLines: 3,
               ),
             ],
           ),
@@ -113,9 +111,8 @@ class _TeacherNotificationState extends State<TeacherNotification> {
               child: const Text('Hủy'),
             ),
             ElevatedButton(
-              onPressed: () {
-                () => _addNotification(context);
-                () => Navigator.pop(context);
+              onPressed: () async {
+                await _addNotification(context);
               },
               child: const Text('Thêm'),
             ),
@@ -127,20 +124,15 @@ class _TeacherNotificationState extends State<TeacherNotification> {
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context);
-    final role = userProvider.role ?? 'Vai trò';
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Gửi thông báo'),
-        leading: Builder(
-          builder: (context) => IconButton(
-            icon: const Icon(Icons.menu),
-            onPressed: () => Scaffold.of(context).openDrawer(),
-          ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
         ),
       ),
-      drawer: Sidebar(role: role),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: _isLoading

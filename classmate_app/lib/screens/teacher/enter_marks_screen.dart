@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../widgets/sidebar.dart';
 import '../../provider/user_provider.dart';
 
 class EnterMarks extends StatelessWidget {
@@ -20,7 +19,6 @@ class EnterMarks extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      drawer: Sidebar(role: role),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

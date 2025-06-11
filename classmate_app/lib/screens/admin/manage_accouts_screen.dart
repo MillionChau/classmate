@@ -3,9 +3,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
-import '../../models/student.dart';
-import '../../models/teacher.dart';
-import '../../models/admin.dart';
 
 class ManageAccountsScreen extends StatefulWidget {
   const ManageAccountsScreen({super.key});

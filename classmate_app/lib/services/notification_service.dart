@@ -1,20 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-<<<<<<< HEAD
 import '../models/notification.dart';
-=======
-<<<<<<< HEAD
 import 'package:flutter/foundation.dart';
-
-class NotificationService {
-  static final String baseUrl = kIsWeb 
-    ? 'http://localhost:8080'   
-    : 'http://10.0.2.2:8080';
-
-    
-=======
-import '../models/notification.dart'; // Import model Notification
->>>>>>> ae70e0b83aa0f294f72c6f5635d3a31d98f92260
 
 class NotificationService {
   final String baseUrl;
@@ -111,5 +98,4 @@ class NotificationService {
       throw Exception('Lỗi khi xóa thông báo: $e');
     }
   }
->>>>>>> 8bd2927b1d48cdb2771c0909822b43e2f65919d4
 }

@@ -1,7 +1,5 @@
-import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import '../../../routes/app_routes.dart';
 import 'package:provider/provider.dart';
 import '../../provider/user_provider.dart';
@@ -47,6 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
             role: user['role'],
             fullName: user['name'],
             token: token,
+            classId: user['className'] ?? (user['role'] == 'student')
           );
 
           switch (user['role']) {

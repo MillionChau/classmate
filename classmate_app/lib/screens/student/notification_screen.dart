@@ -5,6 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:flutter/foundation.dart';
 
 class ThongBaoScreen extends StatefulWidget {
+  const ThongBaoScreen({super.key});
+
   @override
   _ThongBaoScreenState createState() => _ThongBaoScreenState();
 }

@@ -18,23 +18,16 @@ class AuthService {
     final data = jsonDecode(response.body);
 
     if (response.statusCode == 200) {
-<<<<<<< HEAD
-      final data = jsonDecode(response.body);
       // Lưu thông tin user vào SharedPreferences
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('userData', jsonEncode({
         'name': data['name'],
-        'role': data['role']
-      }));
-      return {
-        'message': data['message'],
         'role': data['role'],
-        'name': data['name'],
-=======
+        'className': data['className'] ?? (data['role'] == 'student')
+      }));
       return {
         'success': true,
         'data': data,
->>>>>>> 8bd2927b1d48cdb2771c0909822b43e2f65919d4
       };
     } else {
       return {

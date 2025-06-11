@@ -69,7 +69,7 @@ class AdminController {
       final position = data['position']?.toString();
       final password = data['password']?.toString();
 
-      if (id == null || name == null || position == null || password == null) {
+      if (name == null || position == null || password == null) {
         return Response.badRequest(body: jsonEncode({'message': 'Thiếu dữ liệu'}));
       }
 

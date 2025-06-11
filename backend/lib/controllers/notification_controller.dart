@@ -122,7 +122,7 @@ class NotificationController {
     try {
       final collection = MongoService.db.collection('notifications');
 
-      final notification = await collection.findOne({'id': id}); // ❗ await ở đây!
+      final notification = await collection.findOne({'id': id});
 
       if (notification == null) {
         return Response.notFound(
@@ -143,7 +143,7 @@ class NotificationController {
 
   static Future<Response> getAllNotificationCount(Request req) async {
     try {
-      final collection = await MongoService.db.collection('notifications');
+      final collection = MongoService.db.collection('notifications');
       final count = await collection.count({'status': 'approved'});
 
       return Response.ok(jsonEncode({'count': count}));

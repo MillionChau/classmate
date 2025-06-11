@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../../widgets/sidebar.dart';
-import '../../provider/user_provider.dart';
 import '../../services/notification_service.dart';
 import '../../models/notification.dart';
 import 'package:intl/intl.dart';

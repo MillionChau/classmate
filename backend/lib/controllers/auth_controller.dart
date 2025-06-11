@@ -16,11 +16,13 @@ class AuthController {
 
       if (input == null || password == null) {
         return Response.badRequest(
-            body: jsonEncode({'message': 'Thiếu username hoặc password'}));
+          body: jsonEncode({'message': 'Thiếu username hoặc password'}),
+        );
       }
 
       final collection = MongoService.db.collection('users');
 
+      // Tìm theo username hoặc name + password
       final user = await collection.findOne({
         r'$or': [
           {'username': input},
@@ -31,27 +33,30 @@ class AuthController {
 
       if (user == null) {
         return Response.forbidden(
-            jsonEncode({'message': 'Tài khoản hoặc mật khẩu sai'}));
+          jsonEncode({'message': 'Tài khoản hoặc mật khẩu sai'}),
+        );
       }
 
       switch (user['role']) {
         case 'admin':
-          return _buildAdminResponse(user);
+          return buildAdminResponse(user);
         case 'teacher':
-          return _buildTeacherResponse(user);
+          return buildTeacherResponse(user);
         case 'student':
-          return _buildStudentResponse(user);
+          return buildStudentResponse(user);
         default:
           return Response.forbidden(
-              jsonEncode({'message': 'Vai trò không hợp lệ'}));
+            jsonEncode({'message': 'Vai trò không hợp lệ'}),
+          );
       }
     } catch (e) {
       return Response.internalServerError(
-          body: jsonEncode({'message': 'Lỗi server: ${e.toString()}'}));
+        body: jsonEncode({'message': 'Lỗi server: ${e.toString()}'}),
+      );
     }
   }
 
-  static Response _buildAdminResponse(Map<String, dynamic> user) {
+  static Response buildAdminResponse(Map<String, dynamic> user) {
     final admin = Admin.fromMap(user);
     return Response.ok(jsonEncode({
       'message': 'Đăng nhập admin thành công',
@@ -62,11 +67,11 @@ class AuthController {
         'role': 'admin',
         'permissions': ['manage_users', 'manage_system', 'view_all_data'],
       },
-      'access_token': _generateToken(admin.id, 'admin'),
+      'access_token': generateToken(admin.id, 'admin'),
     }));
   }
 
-  static Response _buildTeacherResponse(Map<String, dynamic> user) {
+  static Response buildTeacherResponse(Map<String, dynamic> user) {
     final teacher = Teacher.fromMap(user);
     return Response.ok(jsonEncode({
       'message': 'Đăng nhập giáo viên thành công',
@@ -77,11 +82,11 @@ class AuthController {
         'role': 'teacher',
         'permissions': ['manage_classes', 'post_grades', 'view_students'],
       },
-      'access_token': _generateToken(teacher.id, 'teacher'),
+      'access_token': generateToken(teacher.id, 'teacher'),
     }));
   }
 
-  static Response _buildStudentResponse(Map<String, dynamic> user) {
+  static Response buildStudentResponse(Map<String, dynamic> user) {
     final student = Student.fromMap(user);
     return Response.ok(jsonEncode({
       'message': 'Đăng nhập học sinh thành công',
@@ -92,11 +97,13 @@ class AuthController {
         'role': 'student',
         'permissions': ['view_grades', 'view_schedule', 'submit_assignments'],
       },
-      'access_token': _generateToken(student.id, 'student'),
+      'access_token': generateToken(student.id, 'student'),
     }));
   }
 
-  static String _generateToken(String userId, String role) {
-    return base64Encode(utf8.encode('$userId|$role|${DateTime.now().toIso8601String()}'));
+  static String generateToken(String userId, String role) {
+    return base64Encode(
+      utf8.encode('$userId|$role|${DateTime.now().toIso8601String()}'),
+    );
   }
 }

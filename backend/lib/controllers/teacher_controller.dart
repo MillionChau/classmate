@@ -70,7 +70,7 @@ class TeacherController {
       final subject = data['subject']?.toString();
       final password = data['password']?.toString();
 
-      if (id == null || name == null || subject == null || password == null) {
+      if (name == null || subject == null || password == null) {
         return Response.badRequest(body: jsonEncode({'message': 'Thiếu dữ liệu'}));
       }
 

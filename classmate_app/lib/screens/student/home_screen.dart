@@ -58,7 +58,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
           ),
         ),
       ),
-      drawer: Sidebar(role: role),
+      drawer: Sidebar(role: role, name: username),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

@@ -90,11 +90,11 @@ class ScheduleController {
     });
 
     // Verify deletion was successful
-    if (writeResult == null || !writeResult.isSuccess) {
+    if (!writeResult.isSuccess) {
       return Response.internalServerError(
         body: jsonEncode({
           'error': 'Lỗi khi xóa dữ liệu',
-          'serverError': writeResult?.errmsg ?? 'Unknown error'
+          'serverError': writeResult.errmsg ?? 'Unknown error'
         }),
       );
     }
@@ -122,7 +122,7 @@ class ScheduleController {
 
 
   // Lấy lịch theo lớp
-  static Future<Response> getScheduleByClass(String classId) async {
+  static Future<Response> getScheduleByClass(Request req, String classId) async {
     try {
       final collection = MongoService.db.collection('schedules');
       final schedules = await collection.find({'classId': classId}).toList();
@@ -132,6 +132,7 @@ class ScheduleController {
       return Response.internalServerError(body: jsonEncode({'message': 'Lỗi server'}));
     }
   }
+
 
   // Lấy lịch theo lớp + tuần
   static Future<Response> getScheduleByClassAndWeek(String classId, String week) async {
@@ -150,17 +151,56 @@ class ScheduleController {
   }
 
   // Giáo viên xem tất cả các tiết dạy của mình
-  static Future<Response> getScheduleByTeacher(String teacherId) async {
+  static Future<Response> getScheduleByTeacher(Request req, String teacherId) async {
+    if (teacherId.isEmpty) {
+      return Response.badRequest(body: jsonEncode({'error': 'teacherId không được để trống'}));
+    }
+
     try {
       final collection = MongoService.db.collection('schedules');
 
       final schedules = await collection.find({
-        'schedule.teacherId': teacherId
+        'schedule': {
+          r'$elemMatch': {'teacherId': teacherId}
+        }
       }).toList();
 
-      return Response.ok(jsonEncode(schedules));
-    } catch (e) {
-      return Response.internalServerError(body: jsonEncode({'message': 'Lỗi server'}));
+      if (schedules.isEmpty) {
+        return Response.ok(jsonEncode({
+          'message': 'Không tìm thấy lịch giảng dạy cho giáo viên',
+          'data': []
+        }));
+      }
+
+      return Response.ok(jsonEncode({
+        'message': 'Lấy lịch giảng dạy thành công',
+        'data': schedules
+      }));
+    } catch (e, stackTrace) {
+      print('Error fetching teacher schedule: $e');
+      print('Stack trace: $stackTrace');
+      return Response.internalServerError(body: jsonEncode({
+        'error': 'Lỗi hệ thống',
+        'message': e.toString()
+      }));
+    }
+  }
+
+  static Future<Response> getAllSchedules(Request req) async {
+    try {
+      final collection = MongoService.db.collection('schedules');
+      final allSchedules = await collection.find().toList();
+
+      return Response.ok(jsonEncode({
+        'message': 'Lấy tất cả thời khóa biểu thành công',
+        'data': allSchedules,
+      }));
+    } catch (e, stackTrace) {
+      print('Error fetching all schedules: $e');
+      print('Stack trace: $stackTrace');
+      return Response.internalServerError(
+        body: jsonEncode({'error': 'Lỗi hệ thống', 'message': e.toString()}),
+      );
     }
   }
 }
