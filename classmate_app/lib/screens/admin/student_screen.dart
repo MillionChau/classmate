@@ -19,16 +19,70 @@ class _StudentManagementScreenState extends State<StudentManagementScreen> {
     _studentsFuture = _studentService.getAllStudents();
   }
 
-  void _showNotImplementedDialog() {
+  void _showEditDialog(Student student) {
+    final nameController = TextEditingController(text: student.name);
+    final classController = TextEditingController(text: student.className);
+    final passwordController = TextEditingController();
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Thông báo"),
-        content: const Text("Chức năng này sẽ được triển khai sau."),
+        title: const Text("Chỉnh sửa học sinh"),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: nameController,
+                decoration: const InputDecoration(labelText: 'Họ và tên'),
+              ),
+              TextField(
+                controller: classController,
+                decoration: const InputDecoration(labelText: 'Lớp'),
+              ),
+              TextField(
+                controller: passwordController,
+                decoration: const InputDecoration(labelText: 'Mật khẩu mới (để trống nếu không đổi)'),
+                obscureText: true,
+              ),
+            ],
+          ),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text("Đóng"),
+            child: const Text('Hủy'),
+          ),
+          TextButton(
+            onPressed: () async {
+              final updatedStudent = student.copyWith(
+                name: nameController.text,
+                className: classController.text,
+                password: passwordController.text.isNotEmpty 
+                    ? passwordController.text 
+                    : null,
+              );
+              
+              try {
+                await _studentService.updateStudent(updatedStudent);
+                if (mounted) {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Cập nhật học sinh thành công')),
+                  );
+                  setState(() {
+                    _studentsFuture = _studentService.getAllStudents();
+                  });
+                }
+              } catch (e) {
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Lỗi khi cập nhật: $e')),
+                  );
+                }
+              }
+            },
+            child: const Text('Lưu'),
           ),
         ],
       ),
@@ -67,11 +121,7 @@ class _StudentManagementScreenState extends State<StudentManagementScreen> {
                         children: [
                           IconButton(
                             icon: const Icon(Icons.edit),
-                            onPressed: _showNotImplementedDialog,
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.delete),
-                            onPressed: _showNotImplementedDialog,
+                            onPressed: () => _showEditDialog(student),
                           ),
                         ],
                       ),

@@ -120,6 +120,29 @@ class TeacherService {
     }
   }
 
+  Future<void> updateTeacher(Teacher teacher) async {
+    final response = await http.put(
+      Uri.parse('$baseUrl/teachers/update/${teacher.id}'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(teacher.toMap()),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception(jsonDecode(response.body)['message'] ?? 'Lỗi cập nhật giáo viên');
+    }
+  }
+
+  Future<void> deleteTeacher(String id) async {
+    final response = await http.delete(
+      Uri.parse('$baseUrl/teachers/remove/$id'),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception(jsonDecode(response.body)['message'] ?? 'Lỗi xoá giáo viên');
+    }
+  }
+
+
   dynamic _handleResponse(http.Response response) {
     switch (response.statusCode) {
       case 200:

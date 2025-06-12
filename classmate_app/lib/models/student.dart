@@ -29,4 +29,18 @@ class Student {
       password: map['password']
     );
   }
+
+  Student copyWith({
+    String? id,
+    String? name,
+    String? className,
+    String? password,
+  }) {
+    return Student(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      className: className ?? this.className,
+      password: password ?? this.password,
+    );
+  }
 }

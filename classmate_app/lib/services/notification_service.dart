@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/notification.dart';
-import 'package:flutter/foundation.dart';
 
 class NotificationService {
   final String baseUrl;
@@ -65,6 +64,23 @@ class NotificationService {
     }
   }
 
+  Future<List<AppNotification>> getAllPendingNotification() async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/notification/read-pending'),
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        return data.map((item) => AppNotification.fromMap(item)).toList();
+      } else {
+        throw Exception('Lấy thông báo thất bại: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Lỗi khi lấy thông báo: $e');
+    }
+  }
+
   // Phê duyệt thông báo
   Future<AppNotification> submitNotification(String id) async {
     try {
@@ -72,7 +88,7 @@ class NotificationService {
         Uri.parse('$baseUrl/notification/approve/$id'),
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 400) {
         return AppNotification.fromMap(jsonDecode(response.body));
       } else {
         throw Exception('Phê duyệt thông báo thất bại: ${response.statusCode}');

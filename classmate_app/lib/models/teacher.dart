@@ -29,4 +29,11 @@ class Teacher {
       password: map['password'],
     );
   }
+
+  Teacher copyWith({String? name, String? subject, String? password}) => Teacher(
+    id: id,
+    name: name ?? this.name,
+    subject: subject ?? this.subject,
+    password: password ?? this.password,
+  );
 }

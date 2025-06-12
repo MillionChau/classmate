@@ -1,113 +1,111 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+import '../../provider/user_provider.dart';
 
 class DiemSoScreen extends StatefulWidget {
   const DiemSoScreen({super.key});
 
   @override
-  _DiemSoScreenState createState() => _DiemSoScreenState();
+  State<DiemSoScreen> createState() => _DiemSoScreenState();
 }
 
 class _DiemSoScreenState extends State<DiemSoScreen> {
-  final List<String> students = ['Nguyễn Văn A', 'Trần Thị B', 'Lê Hoàng C'];
-  final Map<String, TextEditingController> controllers = {};
+  List<dynamic> scores = [];
+  String? selectedSubject;
+  bool isLoading = false;
 
-  @override
-  void initState() {
-    super.initState();
-    for (var student in students) {
-      controllers[student] = TextEditingController();
+  final List<String> availableSubjects = [
+    'Toán', 'Ngữ Văn', 'Vật Lý', 'Hoá Học', 'Sinh Học',
+    'Lịch Sử', 'Địa Lý', 'GDCD', 'Tin Học', 'Thể Dục', 'GDQP-AN'
+  ];
+
+  Future<void> fetchScoresBySubject(String studentId, String subject) async {
+    setState(() => isLoading = true);
+    try {
+      final res = await http.get(
+        Uri.parse('http://localhost:8080/mark/student/$studentId/subject/$subject'),
+      );
+
+      if (res.statusCode == 200) {
+        setState(() => scores = jsonDecode(res.body));
+      } else {
+        setState(() => scores = []);
+      }
+    } catch (e) {
+      print('Lỗi lấy điểm theo môn: $e');
+      setState(() => scores = []);
     }
-  }
-
-  @override
-  void dispose() {
-    for (var controller in controllers.values) {
-      controller.dispose();
-    }
-    super.dispose();
-  }
-
-  void saveScores() {
-    controllers.forEach((student, controller) {
-      print('Điểm của $student là: ${controller.text}');
-    });
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Đã lưu điểm thành công!')),
-    );
+    setState(() => isLoading = false);
   }
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+    final studentId = userProvider.userId;
+    final role = userProvider.role;
+
+    if (studentId == null || role != 'student') {
+      return const Scaffold(
+        body: Center(
+          child: Text('Chỉ học sinh mới có thể xem điểm của mình'),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Xem điểm số'),
+        title: const Text('Xem điểm theo môn'),
         backgroundColor: Colors.deepPurple.shade100,
-        iconTheme: IconThemeData(color: Colors.black),
-        titleTextStyle: TextStyle(
+        iconTheme: const IconThemeData(color: Colors.black),
+        titleTextStyle: const TextStyle(
           color: Colors.black,
           fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
-        elevation: 0,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Nhập điểm',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+            DropdownButtonFormField<String>(
+              value: selectedSubject,
+              hint: const Text('Chọn môn học'),
+              items: availableSubjects
+                  .map((subject) => DropdownMenuItem(value: subject, child: Text(subject)))
+                  .toList(),
+              onChanged: (subject) {
+                if (subject != null) {
+                  setState(() => selectedSubject = subject);
+                  fetchScoresBySubject(studentId, subject);
+                }
+              },
             ),
-            SizedBox(height: 16),
-            Expanded(
-              child: ListView.builder(
-                itemCount: students.length,
-                itemBuilder: (context, index) {
-                  final student = students[index];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 3,
-                          child: Text(
-                            student,
-                            style: TextStyle(fontSize: 16),
+            const SizedBox(height: 16),
+            isLoading
+                ? const CircularProgressIndicator()
+                : Expanded(
+                    child: scores.isEmpty
+                        ? const Text('Không có điểm cho môn này')
+                        : ListView.builder(
+                            itemCount: scores.length,
+                            itemBuilder: (context, index) {
+                              final item = scores[index];
+                              return ListTile(
+                                leading: const Icon(Icons.grade),
+                                title: Text('Lớp: ${item['classId']}'),
+                                subtitle: Text('Điểm: ${item['score']}'),
+                                trailing: Text(
+                                  item['createdAt'].toString().split('T').first,
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                              );
+                            },
                           ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: TextField(
-                            controller: controllers[student],
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                              hintText: 'Điểm',
-                              isDense: true,
-                              contentPadding: EdgeInsets.symmetric(vertical: 8),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
+                  ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: saveScores,
-        backgroundColor: Colors.deepPurple.shade100,
-        child: Icon(Icons.save, color: Colors.black),
       ),
     );
   }

@@ -58,7 +58,7 @@ class AppRoutes {
     // Teacher
     teacherHome: (_) => const TeacherHome.TeacherHomePage(),
     teacherSchedule: (_) => const TeacherScheduleScreen(),
-    teacherEnterMarks: (_) => const EnterMarks(),
+    teacherEnterMarks: (_) => const EnterMarksScreen(),
     teacherNotification: (_) => const TeacherNotification(),
 
     // Admin

@@ -45,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
             role: user['role'],
             fullName: user['name'],
             token: token,
-            classId: user['className'] ?? (user['role'] == 'student')
+            classId: user['role'] == 'student' ? user['className'] : null,
           );
 
           switch (user['role']) {

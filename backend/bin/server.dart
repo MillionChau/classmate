@@ -10,6 +10,7 @@ import 'package:backend/api/teacher_api.dart';
 import 'package:backend/api/admin_api.dart';
 import 'package:backend/api/notification_api.dart';
 import 'package:backend/api/schedule_api.dart';
+import 'package:backend/api/mark_api.dart';
 
 import 'package:backend/services/mongo_service.dart';
 
@@ -23,7 +24,8 @@ void main() async {
     ..mount('/teachers/', teacherApi.call)
     ..mount('/admins/', adminApi.call)
     ..mount('/notification/', notificationApi.call)
-    ..mount('/schedules/', scheduleApi.call);
+    ..mount('/schedules/', scheduleApi.call)
+    ..mount('/mark', markApi.call);
 
 
   final handler = Pipeline()

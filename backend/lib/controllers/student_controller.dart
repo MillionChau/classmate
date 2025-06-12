@@ -81,4 +81,64 @@ class StudentController {
       );
     }
   }
+
+  static Future<Response> updateStudent(Request req, String id) async {
+    try {
+      final payload = await req.readAsString();
+      final data = jsonDecode(payload);
+
+      final name = data['name']?.toString();
+      final className = data['className']?.toString();
+      final password = data['password']?.toString();
+
+      if (name == null || className == null || password == null) {
+        return Response.badRequest(body: jsonEncode({'message': 'Thiếu dữ liệu'}));
+      }
+
+      final collection = MongoService.db.collection('users');
+
+      final existingStudent = await collection.findOne({'id': id, 'role': 'student'});
+
+      if (existingStudent == null) {
+        return Response.notFound(jsonEncode({'message': 'Không tìm thấy học sinh'}));
+      }
+
+      final updateData = <String, dynamic>{};
+
+      if (name.isNotEmpty) updateData['name'] = name;
+      if (className.isNotEmpty) updateData['className'] = className;
+      if (password.isNotEmpty) updateData['password'] = password;
+
+      await collection.update(
+        {'id': id},
+        {r'$set': updateData},
+      );
+
+      return Response.ok(jsonEncode({'message': 'Cập nhật học sinh thành công'}));
+    } catch (e, stack) {
+      print('Lỗi khi cập nhật học sinh: $e\n$stack');
+      return Response.internalServerError(
+        body: jsonEncode({'message': 'Lỗi server khi cập nhật học sinh'}),
+      );
+    }
+  }
+
+  static Future<Response> getStudentsByClass(Request req, String className) async {
+    final collection = MongoService.db.collection('users');
+
+    try {
+      final decodedClass = Uri.decodeComponent(className);
+      final results = await collection.find({
+        'role': 'student',
+        'className': decodedClass,
+      }).toList();
+
+      final students = results.map((doc) => Student.fromMap(doc).toMap()).toList();
+      return Response.ok(jsonEncode(students));
+    } catch (e) {
+      return Response.internalServerError(
+        body: jsonEncode({'message': 'Lỗi server', 'error': e.toString()}),
+      );
+    }
+  }
 }

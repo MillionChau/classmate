@@ -7,6 +7,8 @@ Router get studentApi {
   router.post('/add', StudentController.addStudent);
   router.get('/all', StudentController.getStudent);
   router.get('/count', StudentController.getStudentCount);
+  router.put('/update/<id>', StudentController.updateStudent);
+  router.get('/class/<className>', StudentController.getStudentsByClass);
 
   return router;
 }

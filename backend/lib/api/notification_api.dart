@@ -6,6 +6,7 @@ Router get notificationApi {
 
   router.post('/add', NotificationController.sendNotification);
   router.get('/read', NotificationController.getAllNotifications);
+  router.get('/read-pending', NotificationController.getNotificationPending);
   router.patch('/approve/<id>', NotificationController.approveNotification);
   router.delete('/delete/<id>', NotificationController.removedNotification);
   router.get('/count', NotificationController.getAllNotificationCount);
