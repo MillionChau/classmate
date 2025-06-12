@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../../routes/app_routes.dart';
 import 'package:provider/provider.dart';
@@ -17,10 +16,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
-
-  static final String baseUrl = kIsWeb 
-    ? 'http://localhost:8080/auth'   
-    : 'http://10.0.2.2:8080/auth';  
 
   Future<void> _login() async {
     if (_formKey.currentState!.validate()) {

@@ -101,7 +101,7 @@ class _TeacherManagementScreenState extends State<TeacherManagementScreen> {
           TextButton(
             onPressed: () async {
               try {
-                await _teacherService.deleteTeacher(teacher.id!);
+                await _teacherService.deleteTeacher(teacher.id);
                 if (mounted) {
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -146,8 +146,8 @@ class _TeacherManagementScreenState extends State<TeacherManagementScreen> {
               final teacher = teachers[index];
               return ListTile(
                 leading: const Icon(Icons.person),
-                title: Text(teacher.name ?? 'Không tên'),
-                subtitle: Text('ID: ${teacher.id ?? "?"} | Môn: ${teacher.subject ?? "?"}'),
+                title: Text(teacher.name),
+                subtitle: Text('ID: ${teacher.id} | Môn: ${teacher.subject}'),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [

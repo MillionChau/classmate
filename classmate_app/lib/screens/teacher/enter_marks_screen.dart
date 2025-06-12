@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import '../../provider/user_provider.dart';
+import 'package:flutter/foundation.dart';
 
 class EnterMarksScreen extends StatefulWidget {
   const EnterMarksScreen({super.key});
@@ -12,6 +13,9 @@ class EnterMarksScreen extends StatefulWidget {
 }
 
 class _EnterMarksScreenState extends State<EnterMarksScreen> {
+  static final String baseUrl = kIsWeb 
+    ? 'http://localhost:8080'   
+    : 'http://10.0.2.2:8080';
   List<Map<String, String>> teachingSubjects = [];
   String? selectedClass;
   String? selectedSubject;
@@ -47,7 +51,7 @@ class _EnterMarksScreenState extends State<EnterMarksScreen> {
 
     try {
       final response = await http.get(
-        Uri.parse('http://localhost:8080/mark/teacher/$teacherId'),
+        Uri.parse('$baseUrl/mark/teacher/$teacherId'),
       );
 
       if (response.statusCode == 200) {
@@ -76,7 +80,7 @@ class _EnterMarksScreenState extends State<EnterMarksScreen> {
 
     try {
       final response = await http.get(
-        Uri.parse('http://localhost:8080/students/class/${Uri.encodeComponent(className)}'),
+        Uri.parse('$baseUrl/students/class/${Uri.encodeComponent(className)}'),
       );
 
       if (response.statusCode == 200) {
@@ -120,7 +124,7 @@ class _EnterMarksScreenState extends State<EnterMarksScreen> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://localhost:8080/mark/add'),
+        Uri.parse('$baseUrl/mark/add'),
         headers: {'Content-Type': 'application/json'},
         body: body,
       );

@@ -64,7 +64,6 @@ class _ThoiKhoaBieuScreenState extends State<ThoiKhoaBieuScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<UserProvider>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(

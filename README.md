@@ -38,9 +38,30 @@
         + service/ chứa các dịch vụ ví dụ đăng nhập
         + widget/ chứa các widget sử dụng nhiều trong ứng dụng
         + main.dart file chính front-end của ứng dụng
-## Quá trình thực hiện
-### Khởi tạo dự án
-### Xây dựng backend
-### Xây dựng front-end
-### Tiến hành kiểm thử
+## Hướng dẫn download
+- Clone dự án
+- Vào thư mục backend down dependencies
+```base
+    cd backend
+    dart pub get
+```
+- Trong classmate_app
+```base
+    cd classmate_app
+    flutter pub get
+```
+- Trong thư mục backend tạo file .env và ghi URI MongoDB có dạng
+```.env
+    MONGO_URI=mongodb+srv://xxxx:xxxx@cluster0.qlbix.mongodb.net/xxx
+```
+- Chạy backend dự án
+```base
+    cd backend
+    dart run ./bin/server.dart
+```
+- Chạy frontend dự án
+```base
+    cd classmate_app
+    flutter run
+```
 ## Tự đánh giá

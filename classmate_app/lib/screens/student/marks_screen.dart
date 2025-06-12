@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import '../../provider/user_provider.dart';
+import 'package:flutter/foundation.dart';
 
 class DiemSoScreen extends StatefulWidget {
   const DiemSoScreen({super.key});
@@ -12,9 +13,13 @@ class DiemSoScreen extends StatefulWidget {
 }
 
 class _DiemSoScreenState extends State<DiemSoScreen> {
+   static final String baseUrl = kIsWeb 
+    ? 'http://localhost:8080'   
+    : 'http://10.0.2.2:8080';
   List<dynamic> scores = [];
   String? selectedSubject;
   bool isLoading = false;
+
 
   final List<String> availableSubjects = [
     'Toán', 'Ngữ Văn', 'Vật Lý', 'Hoá Học', 'Sinh Học',
@@ -25,7 +30,7 @@ class _DiemSoScreenState extends State<DiemSoScreen> {
     setState(() => isLoading = true);
     try {
       final res = await http.get(
-        Uri.parse('http://localhost:8080/mark/student/$studentId/subject/$subject'),
+        Uri.parse('$baseUrl/mark/student/$studentId/subject/$subject'),
       );
 
       if (res.statusCode == 200) {
