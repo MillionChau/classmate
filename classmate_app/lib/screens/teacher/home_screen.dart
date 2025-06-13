@@ -102,12 +102,12 @@ class _TeacherHomePageState extends State<TeacherHomePage> {
                 mainAxisSpacing: 12,
                 children: [
                   QuickAccessCard(
-                    title: 'Xem TKB',
+                    title: 'Xem Lịch Giảng',
                     icon: Icons.calendar_today,
                     onTap: () => Navigator.pushNamed(context, '/teacher/schedule'),
                   ),
                   QuickAccessCard(
-                    title: 'Xem điểm',
+                    title: 'Nhập Điểm',
                     icon: Icons.star,
                     onTap: () => Navigator.pushNamed(context, '/teacher/enter-marks'),
                   ),
