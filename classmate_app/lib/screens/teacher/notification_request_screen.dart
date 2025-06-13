@@ -71,12 +71,22 @@ class _TeacherNotificationState extends State<TeacherNotification> {
         return;
       }
 
+      // Gọi hàm sendNotification
+      await _notificationService.sendNotification(
+        title: title,
+        desc: desc,
+        userId: userId,
+      );
+
       _titleController.clear();
       _descController.clear();
       Navigator.of(context).pop();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Bạn đã gửi thông báo tới phía quản trị viên!')),
       );
+      
+      // Refresh danh sách thông báo
+      await _fetchNotifications();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Lỗi khi thêm thông báo: $e')),

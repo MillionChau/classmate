@@ -88,8 +88,18 @@ class NotificationService {
         Uri.parse('$baseUrl/notification/approve/$id'),
       );
 
-      if (response.statusCode == 200 || response.statusCode == 400) {
-        return AppNotification.fromMap(jsonDecode(response.body));
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        // Kiểm tra dữ liệu trước khi parse
+        if (data is! Map<String, dynamic>) {
+          throw Exception('Dữ liệu trả về không hợp lệ');
+        }
+        return AppNotification.fromMap(data);
+      } else if (response.statusCode == 400) {
+        final errorData = jsonDecode(response.body);
+        throw Exception('Phê duyệt thất bại: ${errorData['message'] ?? 'Lỗi không xác định'}');
+      } else if (response.statusCode == 404) {
+        throw Exception('Không tìm thấy thông báo');
       } else {
         throw Exception('Phê duyệt thông báo thất bại: ${response.statusCode}');
       }

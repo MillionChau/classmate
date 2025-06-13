@@ -61,20 +61,19 @@ class _ApproveNotificationScreenState extends State<ApproveNotificationScreen> {
           final index = _notifications.indexWhere((n) => n.id == noti.id);
           if (index != -1) {
             _notifications[index] = updated;
-            _notifications = List.from(_notifications); // Force rebuild
+            _notifications = List.from(_notifications);
           }
         });
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Phê duyệt thành công')),
         );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Thông báo đã được duyệt')),
-        );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Lỗi phê duyệt: $e')),
+        SnackBar(
+          content: Text('Lỗi phê duyệt: ${e.toString().replaceAll('Exception: ', '')}'),
+          duration: const Duration(seconds: 3),
+        ),
       );
     }
   }
@@ -174,10 +173,24 @@ class _ApproveNotificationScreenState extends State<ApproveNotificationScreen> {
                               trailing: Wrap(
                                 spacing: 8,
                                 children: [
-                                  Switch(
-                                    value: isApproved,
-                                    onChanged: (_) => _approveNotification(noti),
-                                  ),
+                                  if (!isApproved)
+                                    ElevatedButton(
+                                      onPressed: () => _approveNotification(noti),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.green,
+                                        foregroundColor: Colors.white,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                      ),
+                                      child: const Text('Phê duyệt'),
+                                    )
+                                  else
+                                    const Chip(
+                                      label: Text('Đã phê duyệt'),
+                                      backgroundColor: Colors.green,
+                                      labelStyle: TextStyle(color: Colors.white),
+                                    ),
                                   IconButton(
                                     icon: const Icon(Icons.delete, color: Colors.red),
                                     onPressed: () => _deleteNotification(noti),

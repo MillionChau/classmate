@@ -109,7 +109,12 @@ class NotificationController {
         r'$set': {'status': 'approved'}
       });
 
-      return Response.ok(jsonEncode({'message': 'Duyệt thông báo thành công'}));
+      // Lấy lại thông báo sau khi update để trả về đầy đủ thông tin
+      final updatedNotification = await collection.findOne({'id': id});
+      
+      return Response.ok(jsonEncode(updatedNotification ?? {
+        'message': 'Duyệt thông báo thành công nhưng không thể lấy lại thông tin'
+      }));
     } catch (e, stack) {
       print('Lỗi khi duyệt thông báo: $e\n$stack');
       return Response.internalServerError(

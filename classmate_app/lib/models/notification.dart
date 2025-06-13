@@ -2,7 +2,7 @@ class AppNotification {
   final String id;
   final String title;
   final String description;
-  final String createdBy;
+  final String? createdBy;
   final String status;
   final DateTime createdAt;
 
